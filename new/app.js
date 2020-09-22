@@ -5,13 +5,18 @@ let ctx;
 let canvas;
 
 function play() {
-    let piece = new Piece(ctx);
+    let piece = new Piece(ctx, [
+            [1, 0, 0],
+            [1, 1, 0],
+            [0, 1, 0]
+        ], "rgba(0,255,0,0.5)");
+    
     board = new Board(ctx);
     piece.clear();
     piece.draw();
     
     board.piece = piece;
-  }
+}
 
 window.onload = () => {
     canvas = document.getElementById('board');
@@ -49,4 +54,4 @@ const moves = {
     [KEY.LEFT]:  p => ({ ...p, startPositionX: p.startPositionX - 1 }),
     [KEY.RIGHT]: p => ({ ...p, startPositionX: p.startPositionX + 1 }),
     [KEY.DOWN]:    p => ({ ...p, startPositionY: p.startPositionY + 1 })
-  };
+};

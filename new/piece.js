@@ -1,12 +1,8 @@
 class Piece {
-    constructor(ctx) {
+    constructor(ctx, shape, color = "blue") {
         this.ctx = ctx;
-        this.color = "blue";
-        this.shape = [
-            [1, 0, 0], 
-            [1, 1, 1], 
-            [0, 0, 0]
-        ];
+        this.color = color;
+        this.shape = shape;
 
         this.startPositionX = 3;
         this.startPositionY = 0;
