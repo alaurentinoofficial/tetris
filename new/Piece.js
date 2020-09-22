@@ -26,13 +26,16 @@ class Piece {
     }
 
     move(x, y) {
-        if (this.valid(x, y)) {
-            this.startPositionX = x;
-            this.startPositionY = y;
-        }
+        if (!this.valid(x, y))
+            return false;
 
+        this.startPositionX = x;
+        this.startPositionY = y;
+        
         this.clear();
         this.draw();
+
+        return true;
     }
 
     valid(x, y) {
@@ -71,7 +74,13 @@ class Piece {
         
         this.clear();
         this.draw();
-	}
+    }
+    
+    aboveFloor() {
+        return this.shape.every((row, dy) => {
+            return pieceAboveFloor(this.startPositionY + dy + 1)
+        });
+    }
 }
 
 function transpose(matrix) {

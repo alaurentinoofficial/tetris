@@ -4,6 +4,14 @@ let board;
 let ctx;
 let canvas;
 
+function gravity() {
+    setTimeout(() => {
+        if (!moves[KEY.DOWN](board.piece))
+            return
+        
+        gravity();
+    }, 1000);
+}
 
 function play() {
     let piece = new PieceFactory(ctx);
@@ -11,8 +19,9 @@ function play() {
     board = new Board(ctx);
     piece.clear();
     piece.draw();
-    
     board.piece = piece;
+
+    gravity();
 }
 
 window.onload = () => {
