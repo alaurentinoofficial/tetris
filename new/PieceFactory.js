@@ -1,8 +1,6 @@
 function PieceFactory(ctx) {
     let I = new Piece(ctx, [
-        [0, 0, 0, 0],
         [1, 1, 1, 1],
-        [0, 0, 0, 0]
     ], "#00c3ff");
     
     let J = new Piece(ctx, [
