@@ -1,25 +1,43 @@
 * {
-    font-family: 'Press Start 2P', cursive;
-  }
-  
-  .grid {
-    display: grid;
-    grid-template-columns: 320px 200px;
-  }
-  
-  .right-column {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  .game-board {
-    border: solid 2px;
-  }
-  
-  .play-button {
-    background-color: #4caf50;
-    font-size: 16px;
-    padding: 15px 30px;
-    cursor: pointer;
-  }
+	font-family: 'Press Start 2P', cursive;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: 320px 200px;
+
+	color: #ffffff;
+}
+
+.right-column {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.game-board {
+	border: solid 2px;
+}
+
+.play-button {
+	background-color: #00cf53;
+	font-size: 16px;
+	padding: 12px 30px;
+	cursor: pointer;
+	border: none;
+	color: #ffffff;
+	transition: all .5s ease;
+	box-shadow: 0 20px 5px -10px rgba(#000000, 0.4);
+}
+
+.play-button:hover {
+	background-color: #1f964e;
+}
+
+body {
+	background-color: #182d3d;
+}
+
+canvas {
+	background-color: #11212c;
+}

@@ -1,20 +1,38 @@
 class Piece {
-    constructor(ctx, shape, color = "blue") {
+    constructor(ctx, shape, color = "blue", border_color = undefined) {
         this.ctx = ctx;
         this.color = color;
         this.shape = shape;
+
+        this.border_color = !border_color ? color : border_color;
 
         this.startPositionX = 3;
         this.startPositionY = 0;
     }
 
     draw() {
-        this.ctx.fillStyle = this.color;
         this.shape.forEach((row, y) => {
             row.forEach((value, x) => {
                 
                 if (value > 0) {
-                    this.ctx.fillRect(this.startPositionX + x, this.startPositionY + y, 1, 1);
+                    this.ctx.fillStyle = this.color;
+                    this.ctx.strokeStyle = this.border_color;
+                    // this.ctx.fillRect(this.startPositionX + x, this.startPositionY + y, 1, 1);
+
+                    // this.ctx.fillStyle = "rgba(0,0,0,0.15)";
+                    // this.ctx.fillRect(this.startPositionX + x + 0.12, this.startPositionY + y + 0.14, 1 - 0.22, 1 - 0.23);
+                    
+                    let cornerRadius = 0.17;
+                    let rectWidth = 0.9;
+                    let rectHeight = 0.9;
+                    let rectX = this.startPositionX + x + 0.05;
+                    let rectY = this.startPositionY + y + 0.05;
+
+                    this.ctx.lineJoin = "round";
+                    this.ctx.lineWidth = cornerRadius;
+
+                    this.ctx.fillRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
+                    this.ctx.strokeRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
                 }
             });
         });
