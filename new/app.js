@@ -4,24 +4,15 @@ let board;
 let ctx;
 let canvas;
 
-function gravity() {
-    setTimeout(() => {
-        if (!moves[KEY.DOWN](board.piece))
-            return
-        
-        gravity();
-    }, 1000);
-}
 
 function play() {
-    let piece = new PieceFactory(ctx);
-
     board = new Board(ctx);
-    piece.clear();
-    piece.draw();
+
+    let piece = new PieceFactory(ctx);
     board.piece = piece;
 
-    gravity();
+    piece.clear();
+    piece.draw();
 }
 
 window.onload = () => {
