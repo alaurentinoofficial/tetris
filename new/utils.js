@@ -10,7 +10,7 @@ function bounceError(x) {
     if (x >= COLS)
         return COLS - x;
     else if (x < 0)
-        return x;
+        return x * -1;
     else
         return 0;
 }
