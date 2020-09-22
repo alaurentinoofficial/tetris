@@ -6,6 +6,15 @@ function pieceInInsideWalls(positionX) {
     return positionX < COLS && positionX >= 0;
 }
 
+function bounceError(x) {
+    if (x >= COLS)
+        return COLS - x;
+    else if (x < 0)
+        return x;
+    else
+        return 0;
+}
+
 function pieceAboveFloor(positionY) {
     return positionY < ROWS;
 }

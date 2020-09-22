@@ -40,4 +40,4 @@ const moves = {
     [KEY.LEFT]:  p => p.move(p.startPositionX - 1, p.startPositionY),
     [KEY.RIGHT]: p => p.move(p.startPositionX + 1, p.startPositionY),
     [KEY.DOWN]:  p => p.move(p.startPositionX, p.startPositionY + 1)
-};
+};  

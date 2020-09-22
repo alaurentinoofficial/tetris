@@ -47,12 +47,12 @@ class Piece {
     }
 
     rotate() {
-		// Transpose matrix
+        // Transpose matrix
 		this.shape = transpose(this.shape)
 
 		// Reverse the order of the columns.
         this.shape.forEach(row => row.reverse());
-
+        
         this.clear();
         this.draw();
 	}
