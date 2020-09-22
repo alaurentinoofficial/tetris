@@ -6,12 +6,8 @@ let canvas;
 
 
 function play() {
-    let piece = new Piece(ctx, [
-            [1, 0, 0],
-            [1, 1, 0],
-            [0, 1, 0]
-        ], "rgba(0,255,0,0.5)");
-    
+    let piece = new PieceFactory(ctx);
+
     board = new Board(ctx);
     piece.clear();
     piece.draw();
@@ -39,25 +35,15 @@ document.addEventListener('keydown', event => {
         // Stop the event from bubbling.
         event.preventDefault();
 
-        let p = moves[event.keyCode](board.piece);
-
-        if (board.valid(p)) {    
-            // If the move is valid, move the piece.
-            board.piece.move(p);
-        }
-        else {
-            board.piece.shape = p.shape;
-            board.piece.clear();
-            board.piece.draw();
-        }
+        moves[event.keyCode](board.piece);
     }
 });
 
 const moves = {
-    [KEY.UP]: (p) => board.rotate(p),
-    [KEY.LEFT]:  p => ({ ...p, startPositionX: p.startPositionX - 1 }),
-    [KEY.RIGHT]: p => ({ ...p, startPositionX: p.startPositionX + 1 }),
-    [KEY.DOWN]:    p => ({ ...p, startPositionY: p.startPositionY + 1 })
+    [KEY.UP]: (p) => p.rotate(),
+    [KEY.LEFT]:  p => p.move(p.startPositionX - 1, p.startPositionY),
+    [KEY.RIGHT]: p => p.move(p.startPositionX + 1, p.startPositionY),
+    [KEY.DOWN]:  p => p.move(p.startPositionX, p.startPositionY + 1)
 };
 
 function animate(now = 0) {
