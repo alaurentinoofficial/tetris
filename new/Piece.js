@@ -59,12 +59,11 @@ class Piece {
 
         // Get all lenghts after rotate
         let lenghts = this.shape.map((row, i) => {
-            return row.filter(v => v > 0).length
-        })
+            return row.length
+        });
 
         // Get the max lenght and add with the actual position in X
         let max_lenght = this.startPositionX < 0 ? this.startPositionX : Math.max.apply(null, lenghts) + this.startPositionX
-        
 
         // Calculate the error
         let bounce_error = bounceError(max_lenght);
