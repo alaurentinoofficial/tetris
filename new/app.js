@@ -4,6 +4,7 @@ let board;
 let ctx;
 let canvas;
 
+
 function play() {
     let piece = new Piece(ctx, [
             [1, 0, 0],
@@ -16,6 +17,9 @@ function play() {
     piece.draw();
     
     board.piece = piece;
+    time = { start: performance.now(), elapsed: 0, level: LEVEL[account.level] };
+    animate();
+    
 }
 
 window.onload = () => {
@@ -54,4 +58,14 @@ const moves = {
     [KEY.LEFT]:  p => ({ ...p, startPositionX: p.startPositionX - 1 }),
     [KEY.RIGHT]: p => ({ ...p, startPositionX: p.startPositionX + 1 }),
     [KEY.DOWN]:    p => ({ ...p, startPositionY: p.startPositionY + 1 })
+};
+
+function animate(now = 0) {
+    time.elapsed = now - time.start;
+    if (time.elapsed > time.level) {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  
+    board.draw();
+    requestId = requestAnimationFrame(animate);
+  }
 };
