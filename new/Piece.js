@@ -1,10 +1,11 @@
 class Piece {
-    constructor(ctx, shape, color = "blue", border_color = undefined) {
+    constructor(ctx, shape, color = "blue", border_color = undefined, shadow_color = undefined) {
         this.ctx = ctx;
         this.color = color;
         this.shape = shape;
 
         this.border_color = !border_color ? color : border_color;
+        this.shadow_color = !shadow_color ? color : shadow_color;
 
         this.startPositionX = 3;
         this.startPositionY = 0;
@@ -15,13 +16,14 @@ class Piece {
             row.forEach((value, x) => {
                 
                 if (value > 0) {
-                    this.ctx.fillStyle = this.color;
-                    this.ctx.strokeStyle = this.border_color;
-                    // this.ctx.fillRect(this.startPositionX + x, this.startPositionY + y, 1, 1);
+                    this.ctx.shadowBlur = 20;
+                    this.ctx.shadowOffsetX = 0;
+                    this.ctx.shadowOffsetY = 0;
+                    this.ctx.shadowColor = this.shadow_color;
 
-                    // this.ctx.fillStyle = "rgba(0,0,0,0.15)";
-                    // this.ctx.fillRect(this.startPositionX + x + 0.12, this.startPositionY + y + 0.14, 1 - 0.22, 1 - 0.23);
-                    
+                    this.ctx.fillStyle = this.border_color;
+                    this.ctx.strokeStyle = this.color;
+
                     let cornerRadius = 0.17;
                     let rectWidth = 0.9;
                     let rectHeight = 0.9;
@@ -40,7 +42,7 @@ class Piece {
 
     clear() {
         // Clear old position before drawing.
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        this.ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     }
 
     move(x, y) {
@@ -49,9 +51,6 @@ class Piece {
 
         this.startPositionX = x;
         this.startPositionY = y;
-        
-        this.clear();
-        this.draw();
 
         return true;
     }
@@ -88,9 +87,6 @@ class Piece {
 
         // Bounce back the piece
         this.move(this.startPositionX + bounce_error, this.startPositionY)
-        
-        this.clear();
-        this.draw();
     }
     
     aboveFloor() {

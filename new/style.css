@@ -5,14 +5,16 @@
 .grid {
 	display: grid;
 	grid-template-columns: 320px 200px;
-
-	color: #ffffff;
+	color: #182d3d;
 }
 
 .right-column {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	width: 300px;
+
+	color: #ffffff;
 }
 
 .game-board {
@@ -20,6 +22,8 @@
 }
 
 .play-button {
+	display: block;
+	width: 100%;
 	background-color: #00cf53;
 	font-size: 16px;
 	padding: 12px 30px;
@@ -40,4 +44,21 @@ body {
 
 canvas {
 	background-color: #11212c;
+
+	border-radius: 4px;
+
+	-webkit-box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.5);
+	-moz-box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.5);
+	box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.5);
+}
+
+canvas#next {
+	padding-top: 40px;
+	padding-right: 10px;
+
+	border-radius: 4px;
+
+	-webkit-box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.3);
+	-moz-box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.3);
+	box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.3);
 }

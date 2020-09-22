@@ -7,8 +7,4 @@ class Board {
 	getEmptyBoard() {
 		return Array.from({ length: ROWS }, () => Array(COLS).fill(0))
 	}
-
-	valid(p) {
-		return this.piece.shape == p.shape;
-	}
 }
