@@ -10,20 +10,19 @@ var all_pieces = [];
 
 function clear() {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    next_ctx.clearRect(0, 0, next_ctx.canvas.width, next_ctx.canvas.height);
 }
 
 function draw() {
     next_piece.draw();
+    all_pieces.forEach(x => x.draw());
 }
 
 async function play() {
     board = new Board(ctx);
 
     for(;;) {
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        next_ctx.clearRect(0, 0, next_ctx.canvas.width, next_ctx.canvas.height);
-
-        next_piece.clear();
+        clear()
 
         let piece = next_piece;
         piece.ctx = ctx;
@@ -33,6 +32,7 @@ async function play() {
 
         while (JSON.stringify(next_piece.shape) == JSON.stringify(piece.shape))
             next_piece = new PieceFactory(next_ctx);
+        
 
         await gravity(piece);
     }
@@ -41,7 +41,7 @@ async function play() {
 async function gravity(p) {
     while(moves[KEY.DOWN](p)) {
         clear();
-        draw()
+        draw();
         await sleep(1000);
     }
 }
@@ -77,8 +77,8 @@ document.addEventListener('keydown', event => {
 
         moves[event.keyCode](board.piece);
 
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        all_pieces.forEach(x => x.draw())
+        clear();
+        draw();
     }
 });
 
