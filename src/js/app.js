@@ -24,6 +24,8 @@ async function play() {
 
         pawn.ReleaseTiles();
         board.ValidateFillOneLine();
+        Clear();
+        board.Draw(mainContext);
         
         SetScore(board.score);
     }
