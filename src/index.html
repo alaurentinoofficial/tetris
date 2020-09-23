@@ -14,6 +14,15 @@
 	</head>
 
 	<body id="gameState" class="stoped">
+		<div id="game-over-modal" class="">
+			<div class="modal">
+				<div class="modal-text">Game Over</div>
+				<div class="row modal-btns">
+					<button onclick="play()" class="play-button button">Play Again</button>
+					<button onclick="exit()" class="stop-button button">Exit</button>
+				</div>
+			</div>
+		</div>
 		<div class="grid">
 			<canvas id="board" class="game-board"></canvas>
 			<div class="right-column">
@@ -29,6 +38,12 @@
 					<button onclick="pauseResume()" class="pause-button button"><span class="on-paused">Resume</span><span class="on-gaming">Pause</span></button>
 					<button onclick="stop()" class="stop-button button">Reset</button>
 				</div>
+				<audio id="main-soundtrack">
+					<source src="sounds/soundtrack.mp3" loop type="audio/mpeg">
+				</audio>
+				<audio id="damage-soundtrack">
+					<source src="sounds/damagecoda.mp3" loop type="audio/mpeg">
+				</audio>
 			</div>
 		</div>
 	</body>

@@ -7,6 +7,7 @@
 	grid-template-columns: 320px 200px;
 	color: #182d3d;
 	margin-left: -80px;
+	margin-top: 10px;
 }
 
 .right-column {
@@ -31,6 +32,7 @@
 	color: #ffffff;
 	transition: all .5s ease;
 	box-shadow: 0 20px 5px -10px rgba(#000000, 0.4);
+	border-radius: 4px;
 }
 
 .pause-button {
@@ -52,7 +54,7 @@
 }
 
 .play-button {
-	background-color: #00cf53;
+	background-color: #0fb652;
 }
 
 .play-button:hover {
@@ -70,7 +72,8 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	translate: left();
+	margin: 0;
+	padding: 0;
 }
 
 canvas {
@@ -146,4 +149,56 @@ canvas#next {
 
 .paused .on-paused {
 	display: block;
+}
+
+#game-over-modal {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.6);
+	z-index: 1100;
+	display: flex;
+	justify-content: space-between;
+	display: none;
+}
+
+.active#game-over-modal {
+	display: flex;
+}
+
+.modal {
+	margin: auto;
+	width: 450px;
+	height: 150px;
+	padding: 15px;
+	background-color: #182d3d;
+	border: 8px solid #244055;
+	color: #ffffff;
+
+	border-radius: 4px;
+
+	-webkit-box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.5);
+	-moz-box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.5);
+	box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.5);
+
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.modal-text {
+	height: 100px;
+	margin: auto;
+	margin-top: 40px;
+}
+
+.modal .button {
+	height: 50px;
+	font-size: 12px;
+	flex-wrap: nowrap;
+	overflow-wrap: normal;
+}
+
+.modal .button.play-button {
+	margin-right: 10px;
 }

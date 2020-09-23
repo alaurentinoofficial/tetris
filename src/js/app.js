@@ -7,11 +7,17 @@ let mainContext;
 let nextContext;
 let scoreTxt;
 let gameState;
+let mainSoundTrack;
+let gameOverSoundTrack;
+let gameOverModal;
 
 async function play() {
     board = new Board();
     pawn = new Pawn(board);
     SetState(GameState.GAMING);
+    SetGameOverModalState(false);
+
+    mainSoundTrack.play();
 
     while(GetState() == GameState.GAMING) {
         let piece = {...next_piece}
@@ -37,10 +43,14 @@ async function play() {
 }
 
 function pauseResume() {
-    if (GetState() == GameState.PAUSED)
+    if (GetState() == GameState.PAUSED) {
         SetState(GameState.GAMING);
-    else if (GetState() == GameState.GAMING)
+        mainSoundTrack.play();
+    }
+    else if (GetState() == GameState.GAMING) {
         SetState(GameState.PAUSED);
+        mainSoundTrack.pause();
+    }
 }
 
 function stop() {
@@ -48,12 +58,23 @@ function stop() {
     Reset();
 }
 
-function GameOver() {
-    alert(`Game Over!!!\n\nScore = ${board.score}`);
+function exit() {
+    gameOverSoundTrack.pause();
+    gameOverSoundTrack.currentTime = 0;
+    SetGameOverModalState(false);
+}
+
+async function GameOver() {
+    mainSoundTrack.pause();
+    mainSoundTrack.currentTime = 0;
+    gameOverSoundTrack.play();
+    SetGameOverModalState(true);
     stop();
 }
 
 function Reset() {
+    mainSoundTrack.pause();
+    mainSoundTrack.currentTime = 0;
     SetScore(0);
     Clear();
     next_piece = new PieceFactory();
@@ -108,9 +129,22 @@ function GetState() {
     return gameState.className;
 }
 
+function SetGameOverModalState(state) {
+    if (state)
+        gameOverModal.className = "active";
+    else
+        gameOverModal.className = "";
+}
+
 window.onload = () => {
     scoreTxt = document.getElementById("score");
     gameState = document.getElementById("gameState");
+    mainSoundTrack = document.getElementById("main-soundtrack");
+    mainSoundTrack.loop = true;
+    mainSoundTrack.volume = 0.4;
+
+    gameOverSoundTrack = document.getElementById("damage-soundtrack");
+    gameOverModal = document.getElementById("game-over-modal");
 
     let mainCanvas = document.getElementById('board');
     mainContext = mainCanvas.getContext('2d');
