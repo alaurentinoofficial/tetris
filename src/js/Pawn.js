@@ -46,10 +46,6 @@ class Pawn {
         this.positionY = y;
 
         return true;
-
-        
-        
-        
     }
 
     AddForce(x, y) {

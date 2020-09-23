@@ -39,8 +39,6 @@ class Board {
     }
 
     DetectColision(xFinal, yFinal, id) {
-        //count = count + 1
-        //console.log(count)
         return typeof this.grid[yFinal] === 'undefined' || this.grid[yFinal][xFinal] == id || isValueEmpty(this.grid[yFinal][xFinal])
     }
 }
