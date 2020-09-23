@@ -12,15 +12,18 @@ class Pawn {
         this.__setup = true;
     }
 
-    DetectColision(x, y) {
+    DetectColision(x, y, shape = null, enableInsideWall = true) {
         if (!this.__setup)
             throw "Please, configure first using the Controller.Setup([...])"
 
-        return !this.shape.every((row, iy) => {
+        if (shape == null)
+            shape = this.shape
+
+        return !shape.every((row, iy) => {
             return row.every((value, ix) => {
                 
                 return (isValueEmpty(value)
-                || (pieceInInsideWalls(ix + x) && pieceAboveFloor(iy + y) && this.board.DetectColision(ix + x, iy + y)));
+                || ((enableInsideWall ? pieceInInsideWalls(ix + x) : true) && pieceAboveFloor(iy + y) && this.board.DetectColision(ix + x, iy + y)));
             });
         });
     }
@@ -46,11 +49,16 @@ class Pawn {
             throw "Please, configure first using the Controller.Setup([...])"
 
         // 90° rotation
-		this.shape = transpose(this.shape)
-        this.shape.forEach(row => row.reverse());
+		let rotShape = transpose([...this.shape])
+        rotShape.forEach(row => row.reverse());
+
+        if (this.DetectColision(this.positionX, this.positionY, rotShape, false))
+            return false;
+
+        this.shape = rotShape;
 
         // Get all lenghts after rotate
-        let lenghts = this.shape.map((row, i) => {
+        let lenghts = rotShape.map((row, i) => {
             return row.length
         });
 
@@ -62,6 +70,7 @@ class Pawn {
 
         // Bounce back the piece
         this.AddForce(bounce_error,0);
+        return true;
     }
 
     Draw(context) {
