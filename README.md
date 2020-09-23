@@ -10,7 +10,9 @@
 <br>
 <br>
 
-# Pieces
+# How to play
+
+### The Pieces
 
 | Name | Representation         |
 |------|------------------------|
@@ -26,7 +28,7 @@
 <br>
 <br>
 
-# Scoring
+## Scoring at game
 
 1. To get score it's necessary fill a entire line with any piece or position.
 Like the image represented below:
@@ -48,6 +50,43 @@ Like the image represented below:
 <br>
 
 ![Scored](./assets/scored.png)
+
+<br>
+<br>
+<br>
+
+## Movements
+
+> You can control new pieces that appear on the top and choise where the piece goes to fix, when the piece colide below of the ground or another piece, the actual piece gets rooted and new piece appear in the top 
+
+<br>
+
+- `Rotate`  the piece it's easy using the up arrow (↑)
+
+![Scored](./assets/rot1.png)
+![Scored](./assets/rot2.png)
+
+<br>
+
+- `Move`  the piece it's easy using the left arrow (←) to go left or right arrow (→) to go right
+
+![Scored](./assets/move.png)
+
+<br>
+
+- `Accelerate` the peice start to fall more fast 
+
+![Scored](./assets/down.png)
+
+<br>
+<br>
+<br>
+
+## Game Over
+
+> The game over after to fill any collumns, being impossible to put another piece on the map
+
+![Scored](./assets/gameover.png)
 
 <br>
 <br>
