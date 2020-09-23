@@ -18,11 +18,7 @@ function PieceFactory(ctx, board) {
     let O = new Piece(ctx, [
         [1, 1],
         [1, 1]
-<<<<<<< HEAD
-    ], "#fffb00", "#d1ce08", "rgba(255, 251, 0, 0.4)");
-=======
-    ], board, "#fffb00", "#d1ce08", "rgba(255, 251, 0, 0.3)");
->>>>>>> 7ddfd32efb3d65fc7655dd6faf4ed746f0cf2ddc
+    ], board, "#fffb00", "#d1ce08", "rgba(255, 251, 0, 0.4)");
     
     let S = new Piece(ctx, [
         [0, 1, 1],

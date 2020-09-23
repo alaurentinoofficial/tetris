@@ -1,109 +1,133 @@
 'use strict';
 
 let board;
-let ctx;
-let canvas;
-let next_canvas;
-let next_ctx;
+let pawn;
 let next_piece;
-let scoreTxt; 
+let mainContext;
+let nextContext;
+let scoreTxt;
 
-var all_pieces = [];
+function nextPiece() {
+    let I = [[
+        [1, 1, 1, 1]
+    ], new Tile("#00c3ff", "#0a9ac7", "rgba(0, 195, 255, 0.4)")];
+    
+    let J = [[
+        [1, 0, 0],
+        [1, 1, 1],
+        [0, 0, 0]
+    ], new Tile("#ff6f00", "#d16008", "rgba(255, 111, 0, 0.4)")];
+    
+    let L = [[
+        [0, 0, 1],
+        [1, 1, 1],
+        [0, 0, 0]
+    ], new Tile("#ff00b3", "#cc0892", "rgba(255, 0, 179, 0.4)")];
+    
+    let O = [[
+        [1, 1],
+        [1, 1]
+    ], new Tile("#fffb00", "#d1ce08", "rgba(255, 251, 0, 0.4)")];
+    
+    let S = [[
+        [0, 1, 1],
+        [1, 1, 0],
+        [0, 0, 0]
+    ], new Tile("#e3412b", "#ba2f1c", "rgba(227, 65, 43, 0.5)")];
+    
+    let Z = [[
+        [1, 1, 0],
+        [0, 1, 1],
+        [0, 0, 0]
+    ], new Tile("#00ff5e", "#08d152", "rgba(0, 255, 94, 0.4)")];
+    
+    let T = [[
+        [0, 1, 0],
+        [1, 1, 1],
+        [0, 0, 0]
+    ], new Tile("#c300ff", "#9e08cc", "rgba(195, 0, 255, 0.4)")];
+    
+    let pieces = [I, J, L, O, S, Z, T]
 
-function clear() {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    next_ctx.clearRect(0, 0, next_ctx.canvas.width, next_ctx.canvas.height);
-    board.clear();
-}
-
-function draw() {
-    next_piece.refreshIsNextPiece(true);
-    next_piece.draw();
-    all_pieces.forEach(x => {
-        x.refreshIsNextPiece(false);
-        x.draw();
-        board.draw(x);
-    });
+    return pieces[Math.floor(Math.random() * (pieces.length))];
 }
 
 async function play() {
-    board = new Board(ctx);
-    board.restart();
+    board = new BoardV2();
+    pawn = new Pawn(board);
 
     for(;;) {
-        clear()
-
         let piece = next_piece;
-        piece.ctx = ctx;
-        board.piece = piece;
+        pawn.Setup(piece[0], piece[1], 3, 0);
 
-        all_pieces.push(piece);
+        next_piece = nextPiece();
 
-        while (JSON.stringify(next_piece.shape) == JSON.stringify(piece.shape))
-            next_piece = new PieceFactory(next_ctx, board);
+        await gravity(pawn);
 
-        await gravity(piece);
-        board.validateFillOneLine();
+        pawn.ReleaseTiles();
+        board.ValidateFillOneLine();
+        
+        SetScore(board.score);
     }
 }
 
-async function gravity(p) {
-    while(moves[KEY.DOWN](p)) {
+async function gravity() {
+    while(moves[KEY.DOWN](pawn)) {
         clear();
         draw();
         await sleep(1000);
     }
 }
 
-window.onload = () => {
-    scoreTxt = document.getElementById("score");
-    canvas = document.getElementById('board');
-    ctx = canvas.getContext('2d');
-    
-    // Calculate size of canvas from constants.
-    ctx.canvas.width = COLS * BLOCK_SIZE;
-    ctx.canvas.height = ROWS * BLOCK_SIZE;
+function clear() {
+    mainContext.clearRect(0, 0, mainContext.canvas.width, mainContext.canvas.height);
+    nextContext.clearRect(0, 0, nextContext.canvas.width, nextContext.canvas.height);
+}
 
-    // Scale blocks
-    ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+function draw() {
+    pawn.Draw(mainContext);
+    board.Draw(mainContext);
+}
 
-    next_canvas = document.getElementById('next');
-    next_ctx = next_canvas.getContext('2d');
-
-    next_ctx.canvas.width = 9 * BLOCK_SIZE;
-    next_ctx.canvas.height = 4 * BLOCK_SIZE;
-
-    next_ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
-    
-    next_piece = new PieceFactory(next_ctx, board);
-    next_piece.refreshIsNextPiece(true);
-    next_piece.clear();
-    next_piece.draw();
-};
 
 document.addEventListener('keydown', event => {
     if(moves[event.keyCode]) {
-        // Stop the event from bubbling.
         event.preventDefault();
-
-        moves[event.keyCode](board.piece);
-
+        moves[event.keyCode](pawn);
         clear();
         draw();
     }
 });
 
-function OnScore(point) {
+window.onload = () => {
+    scoreTxt = document.getElementById("score");
+
+    let mainCanvas = document.getElementById('board');
+    mainContext = mainCanvas.getContext('2d');
+    
+    mainContext.canvas.width = COLS * BLOCK_SIZE;
+    mainContext.canvas.height = ROWS * BLOCK_SIZE;
+
+    mainContext.scale(BLOCK_SIZE, BLOCK_SIZE);
+
+    let nextCanvas = document.getElementById('next');
+    nextContext = nextCanvas.getContext('2d');
+
+    nextContext.canvas.width = 9 * BLOCK_SIZE;
+    nextContext.canvas.height = 4 * BLOCK_SIZE;
+
+    nextContext.scale(BLOCK_SIZE, BLOCK_SIZE);
+
+    next_piece = nextPiece();
+};
+
+function SetScore(point) {
     scoreTxt.innerHTML = point; 
 }
 
 const moves = {
-    [KEY.UP]: (p) => p.rotate(),
-    [KEY.LEFT]:  p => p.move(p.startPositionX - 1, p.startPositionY),
-    [KEY.RIGHT]: p => p.move(p.startPositionX + 1, p.startPositionY),
-    [KEY.DOWN]:  p => p.move(p.startPositionX, p.startPositionY + 1)
+    [KEY.UP]: (p) => p.Rotate(),
+    [KEY.LEFT]:  p => p.AddForce(-1,0),
+    [KEY.RIGHT]: p => p.AddForce(1,0),
+    [KEY.DOWN]:  p => p.AddForce(0,+1)
 };
-
-function sleep(ms) {
-    return new Promise(r => setTimeout(r, ms));
-}

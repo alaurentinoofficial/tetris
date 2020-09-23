@@ -18,3 +18,11 @@ function bounceError(x) {
 function pieceAboveFloor(positionY) {
     return positionY < ROWS;
 }
+
+function transpose(matrix) {
+	return matrix[0].map((col, i) => matrix.map(row => row[i]));
+}
+
+function sleep(ms) {
+    return new Promise(r => setTimeout(r, ms));
+}
