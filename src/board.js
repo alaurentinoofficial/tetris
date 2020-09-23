@@ -1,53 +1,41 @@
 class Board {
 	constructor() {
-		this.score = 0;
-	}
+        this.Start();
+    }
+    
+    Start() {
+        this.score = 0;
+        this.grid = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
+    }
 
-	restart() {
-		this.grid = this.getEmptyBoard();
-	}
-
-	getEmptyBoard() {
-		return Array.from({ length: ROWS }, () => Array(COLS).fill(0));
-	}
-
-	clear() {
-		this.grid = this.getEmptyBoard();
-	}
-
-	validateFillOneLine() {
-		let isThereRowFilled = false;
+	ValidateFillOneLine() {
 		let gridCopy = [...this.grid]
 
-		gridCopy = gridCopy.filter(row => row.filter(x => !isValueEmpty(x)).length != row.length);
+        gridCopy = gridCopy.filter(row => row.filter(x => x != null).length != row.length);
 
-		while(gridCopy.length <= this.grid,length)
+		while(gridCopy.length < this.grid.length)
 		{
-			isThereRowFilled = true;				
-			gridCopy.unshift(Array(row.length).fill(0));
+            this.score += 100;				
+			gridCopy.unshift(Array(COLS).fill(null));
 		}
 
-		if(isThereRowFilled) {
-			this.score += 100;
-			OnScore(this.score);
-			this.grid = gridCopy;
-		}
+		this.grid = gridCopy;
+    }
+    
+    AddTile(x, y, tile) {
+        this.grid[y][x] = tile;
+    }
+
+	Draw(context) {
+		this.grid.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value != 0 && value != null)
+                    value.Draw(context, x, y);
+            })
+        })
 	}
 
-	draw(piece) {
-		piece.shape.forEach((row, y) => {
-			row.forEach((value, x) => {
-				if(!isValueEmpty(value)) {
-					var positionXToFill = piece.startPositionX + x;
-					var positionYToFill = piece.startPositionY + y;
-
-					this.grid[positionYToFill][positionXToFill] = piece.id;
-				}
-			})
-		});
-	}
-
-	valid(xFinal, yFinal, id) {
+	DetectColision(xFinal, yFinal, id) {
 		return typeof this.grid[yFinal] === 'undefined' || this.grid[yFinal][xFinal] == id || isValueEmpty(this.grid[yFinal][xFinal])
 	}
 }
