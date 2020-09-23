@@ -1,4 +1,8 @@
 # Tetris
+[![Version](https://img.shields.io/badge/Version-0.3-green.svg)](https://thetetris.herokuapp.com/)
+[![Project](https://img.shields.io/badge/Project-Link-blue.svg)](https://thetetris.herokuapp.com/)
+
+<br>
 
 ![](./assets/game.png)
 
