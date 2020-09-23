@@ -11,23 +11,28 @@ async function play() {
     board = new Board();
     pawn = new Pawn(board);
     SetScore(board.score);
+    if(pawn.isBreak == false){
+        for(;;) {
+            if(pawn.isBreak){
+                alert("GameOver\nSua pontuação foi: " + board.score)
+                break
+            }
+            let piece = {...next_piece}
+            pawn.Setup(piece, 3, 0);
+            console.log(pawn.__setup);
 
-    for(;;) {
-        let piece = {...next_piece}
-        pawn.Setup(piece, 3, 0);
-        console.log(pawn.__setup);
+            while(JSON.stringify(piece.shape) == JSON.stringify(next_piece.shape)){
+                next_piece = new PieceFactory();
+            }
+            await gravity();
 
-        while(JSON.stringify(piece.shape) == JSON.stringify(next_piece.shape))
-            next_piece = new PieceFactory();
-
-        await gravity();
-
-        pawn.ReleaseTiles();
-        board.ValidateFillOneLine();
-        Clear();
-        board.Draw(mainContext);
-        
-        SetScore(board.score);
+            pawn.ReleaseTiles();
+            board.ValidateFillOneLine();
+            Clear();
+            board.Draw(mainContext);
+            
+            SetScore(board.score);
+        }
     }
 }
 

@@ -2,9 +2,11 @@ class Pawn {
     constructor(board) {
         this.board = board;
         this.__setup = false;
+        this.isBreak = false;
     }
 
     Setup(piece, positionX = 4, positionY = 0) {
+        
         this.shape = piece.shape;
         this.tile = piece.tile;
         this.positionX = positionX;
@@ -19,9 +21,10 @@ class Pawn {
         if (shape == null)
             shape = this.shape
 
+
         return !shape.every((row, iy) => {
             return row.every((value, ix) => {
-                
+                //console.log(y)
                 return (isValueEmpty(value)
                 || ((enableInsideWall ? pieceInInsideWalls(ix + x) : true) && pieceAboveFloor(iy + y) && this.board.DetectColision(ix + x, iy + y)));
             });
@@ -32,12 +35,21 @@ class Pawn {
         if (!this.__setup)
             throw "Please, configure first using the Controller.Setup([...])"
         
-        if(this.DetectColision(x, y))
+        if(this.DetectColision(x, y)){
+            if(y == 1){
+                this.isBreak = true
+            }
             return false;
+        }
 
         this.positionX = x;
         this.positionY = y;
+
         return true;
+
+        
+        
+        
     }
 
     AddForce(x, y) {
