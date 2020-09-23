@@ -55,8 +55,6 @@ class Pawn {
         if (this.DetectColision(this.positionX, this.positionY, rotShape, false))
             return false;
 
-        console.log("a")
-
         this.shape = rotShape;
 
         // Get all lenghts after rotate
