@@ -11,15 +11,22 @@ var all_pieces = [];
 function clear() {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     next_ctx.clearRect(0, 0, next_ctx.canvas.width, next_ctx.canvas.height);
+    board.clear();
 }
 
 function draw() {
+    next_piece.refreshIsNextPiece(true);
     next_piece.draw();
-    all_pieces.forEach(x => x.draw());
+    all_pieces.forEach(x => {
+        x.refreshIsNextPiece(false);
+        x.draw();
+        board.draw(x);
+    });
 }
 
 async function play() {
     board = new Board(ctx);
+    board.restart();
 
     for(;;) {
         clear()
@@ -31,8 +38,7 @@ async function play() {
         all_pieces.push(piece);
 
         while (JSON.stringify(next_piece.shape) == JSON.stringify(piece.shape))
-            next_piece = new PieceFactory(next_ctx);
-        
+            next_piece = new PieceFactory(next_ctx, board);
 
         await gravity(piece);
     }
@@ -64,8 +70,9 @@ window.onload = () => {
     next_ctx.canvas.height = 4 * BLOCK_SIZE;
 
     next_ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
-
-    next_piece = new PieceFactory(next_ctx);
+    
+    next_piece = new PieceFactory(next_ctx, board);
+    next_piece.refreshIsNextPiece(true);
     next_piece.clear();
     next_piece.draw();
 };

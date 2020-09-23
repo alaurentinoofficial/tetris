@@ -1,8 +1,10 @@
 class Piece {
-    constructor(ctx, shape, color = "blue", border_color = undefined, shadow_color = undefined) {
+    constructor(ctx, shape, board, color = "blue", border_color = undefined, shadow_color = undefined) {
+        this.id = Math.random();
         this.ctx = ctx;
         this.color = color;
         this.shape = shape;
+        this.board = board;
 
         this.border_color = !border_color ? color : border_color;
         this.shadow_color = !shadow_color ? color : shadow_color;
@@ -11,10 +13,13 @@ class Piece {
         this.startPositionY = 0;
     }
 
+    refreshIsNextPiece(isNextPiece) {
+        this.isNextPiece = isNextPiece;
+    }
+
     draw() {
         this.shape.forEach((row, y) => {
             row.forEach((value, x) => {
-                
                 if (value > 0) {
                     this.ctx.shadowBlur = 20;
                     this.ctx.shadowOffsetX = 0;
@@ -61,7 +66,7 @@ class Piece {
                 let xFinal = x + dx;
                 let yFinal = y + dy;
 
-                return (isValueEmpty(value) || (pieceInInsideWalls(xFinal) && pieceAboveFloor(yFinal)))
+                return (isValueEmpty(value) || (pieceInInsideWalls(xFinal) && pieceAboveFloor(yFinal) && board.valid(xFinal, yFinal, this.id)))
             });
         });
     }
