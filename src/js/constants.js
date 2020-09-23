@@ -10,3 +10,11 @@ const KEY = {
 }
 
 Object.freeze(KEY);
+
+const GameState = {
+	STOPED: "stoped",
+	GAMING: "gaming",
+	PAUSED: "paused"
+}
+
+Object.freeze(GameState);

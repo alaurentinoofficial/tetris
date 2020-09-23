@@ -6,34 +6,58 @@ let next_piece;
 let mainContext;
 let nextContext;
 let scoreTxt;
+let gameState;
 
 async function play() {
     board = new Board();
     pawn = new Pawn(board);
-    SetScore(board.score);
-    if(pawn.isBreak == false){
-        for(;;) {
-            if(pawn.isBreak){
-                alert("GameOver\nSua pontuação foi: " + board.score)
-                break
-            }
-            let piece = {...next_piece}
-            pawn.Setup(piece, 3, 0);
-            console.log(pawn.__setup);
+    SetState(GameState.GAMING);
 
-            while(JSON.stringify(piece.shape) == JSON.stringify(next_piece.shape)){
-                next_piece = new PieceFactory();
-            }
-            await gravity();
+    while(GetState() == GameState.GAMING) {
+        let piece = {...next_piece}
+        pawn.Setup(piece, 3, 0);
 
-            pawn.ReleaseTiles();
+        while(JSON.stringify(piece.shape) == JSON.stringify(next_piece.shape))
+            next_piece = new PieceFactory();
+
+        await Gravity();
+
+        if(GetState() == GameState.GAMING) {
+            try { pawn.ReleaseTiles(); }
+            catch(e) { GameOver(); return; }
+
             board.ValidateFillOneLine();
+            
             Clear();
             board.Draw(mainContext);
             
             SetScore(board.score);
         }
     }
+}
+
+function pauseResume() {
+    if (GetState() == GameState.PAUSED)
+        SetState(GameState.GAMING);
+    else if (GetState() == GameState.GAMING)
+        SetState(GameState.PAUSED);
+}
+
+function stop() {
+    SetState(GameState.STOPED);
+    Reset();
+}
+
+function GameOver() {
+    alert(`Game Over!!!\n\nScore = ${board.score}`);
+    stop();
+}
+
+function Reset() {
+    SetScore(0);
+    Clear();
+    next_piece = new PieceFactory();
+    next_piece.Draw(nextContext, 3, 0);
 }
 
 function Clear() {
@@ -47,14 +71,26 @@ function Draw() {
     next_piece.Draw(nextContext, 3, 0);
 }
 
-async function gravity() {
+function DrawFrame() {
+    Clear();
+    Draw();
+}
+
+async function Gravity() {
     let iterations = 0;
 
-    while(moves[KEY.DOWN](pawn)) {
-        Clear();
-        Draw();
+    let keepMoving = PressKeyListeners[KEY.DOWN]();
+
+    while(keepMoving && GetState() != GameState.STOPED) {
+        DrawFrame();
+
         await sleep(1000);
+        
+        while(GetState() != GameState.GAMING && GetState() != GameState.STOPED)
+            await sleep(300);
+
         iterations += 1;
+        keepMoving = PressKeyListeners[KEY.DOWN]();
     }
 
     return iterations;
@@ -64,8 +100,17 @@ function SetScore(point) {
     scoreTxt.innerHTML = point; 
 }
 
+function SetState(state) {
+    gameState.className = state;
+}
+
+function GetState() {
+    return gameState.className;
+}
+
 window.onload = () => {
     scoreTxt = document.getElementById("score");
+    gameState = document.getElementById("gameState");
 
     let mainCanvas = document.getElementById('board');
     mainContext = mainCanvas.getContext('2d');
@@ -83,22 +128,20 @@ window.onload = () => {
 
     nextContext.scale(BLOCK_SIZE, BLOCK_SIZE);
 
-    next_piece = new PieceFactory();
-    next_piece.Draw(nextContext, 3, 0);
+    Reset();
 };
 
 document.addEventListener('keydown', event => {
-    if(moves[event.keyCode] && pawn) {
+    if(PressKeyListeners[event.keyCode] && pawn) {
         event.preventDefault();
-        moves[event.keyCode](pawn);
-        Clear();
-        Draw();
+        PressKeyListeners[event.keyCode]();
+        DrawFrame();
     }
 });
 
-const moves = {
-    [KEY.UP]: (p) => p.Rotate(),
-    [KEY.LEFT]:  p => p.AddForce(-1,0),
-    [KEY.RIGHT]: p => p.AddForce(1,0),
-    [KEY.DOWN]:  p => p.AddForce(0,1)
+const PressKeyListeners = {
+    [KEY.UP]:    () => GetState() == GameState.GAMING ? pawn.Rotate() : true,
+    [KEY.LEFT]:  () => GetState() == GameState.GAMING ? pawn.AddForce(-1,0) : true,
+    [KEY.RIGHT]: () => GetState() == GameState.GAMING ? pawn.AddForce(1,0) : true,
+    [KEY.DOWN]:  () => GetState() == GameState.GAMING ? pawn.AddForce(0,1) : true
 };

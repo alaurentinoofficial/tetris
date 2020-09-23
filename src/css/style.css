@@ -21,10 +21,8 @@
 	border: solid 2px;
 }
 
-.play-button {
-	display: block;
+.button {
 	width: 100%;
-	background-color: #00cf53;
 	font-size: 16px;
 	padding: 12px 30px;
 	cursor: pointer;
@@ -34,8 +32,36 @@
 	box-shadow: 0 20px 5px -10px rgba(#000000, 0.4);
 }
 
+.pause-button {
+	background-color: #e9830e;
+	margin-right: 10px;
+}
+
+.pause-button:hover {
+	background-color: #ce7715;
+}
+
+
+.stop-button {
+	background-color: #f1461c;
+}
+
+.stop-button:hover {
+	background-color: #be3918;
+}
+
+.play-button {
+	background-color: #00cf53;
+}
+
 .play-button:hover {
 	background-color: #1f964e;
+}
+
+.row {
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
 }
 
 body {
@@ -61,4 +87,58 @@ canvas#next {
 	-webkit-box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.3);
 	-moz-box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.3);
 	box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.3);
+}
+
+.on-gaming-paused { 
+	text-align: center;
+	display: flex;
+	align-items: center;
+}
+
+.stoped .on-stoped {
+	display: block;
+}
+
+.stoped .on-gaming-paused {
+	display: none;
+}
+
+.stoped .on-gaming {
+	display: none;
+}
+
+.stoped .on-paused {
+	display: none;
+}
+
+.gaming .on-stoped {
+	display: none;
+}
+
+.gaming .on-gaming-paused {
+	display: flex;
+}
+
+.gaming .on-gaming {
+	display: flex;
+}
+
+.gaming .on-paused {
+	display: none;
+}
+
+.paused .on-stoped {
+	display: none;
+}
+
+.paused .on-gaming-paused {
+	display: flex;
+}
+
+.paused .on-gaming {
+	display: none;
+}
+
+.paused .on-paused {
+	display: block;
 }
