@@ -6,6 +6,8 @@ let canvas;
 let next_canvas;
 let next_ctx;
 let next_piece;
+let scoreTxt; 
+
 var all_pieces = [];
 
 function clear() {
@@ -41,6 +43,7 @@ async function play() {
             next_piece = new PieceFactory(next_ctx, board);
 
         await gravity(piece);
+        board.validateFillOneLine();
     }
 }
 
@@ -53,6 +56,7 @@ async function gravity(p) {
 }
 
 window.onload = () => {
+    scoreTxt = document.getElementById("score");
     canvas = document.getElementById('board');
     ctx = canvas.getContext('2d');
     
@@ -88,6 +92,10 @@ document.addEventListener('keydown', event => {
         draw();
     }
 });
+
+function OnScore(point) {
+    scoreTxt.innerHTML = point; 
+}
 
 const moves = {
     [KEY.UP]: (p) => p.rotate(),

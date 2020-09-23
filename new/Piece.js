@@ -51,8 +51,9 @@ class Piece {
     }
 
     move(x, y) {
-        if (!this.valid(x, y))
+        if (!this.valid(x, y)) {
             return false;
+        }
 
         this.startPositionX = x;
         this.startPositionY = y;

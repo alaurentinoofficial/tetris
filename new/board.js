@@ -1,4 +1,7 @@
 class Board {
+	constructor() {
+		this.score = 0;
+	}
 
 	restart() {
 		this.grid = this.getEmptyBoard();
@@ -10,6 +13,25 @@ class Board {
 
 	clear() {
 		this.grid = this.getEmptyBoard();
+	}
+
+	validateFillOneLine() {
+		let isThereRowFilled = false;
+		let gridCopy = [...this.grid]
+
+		gridCopy = gridCopy.filter(row => row.filter(x => !isValueEmpty(x)).length != row.length);
+
+		while(gridCopy.length <= this.grid,length)
+		{
+			isThereRowFilled = true;				
+			gridCopy.unshift(Array(row.length).fill(0));
+		}
+
+		if(isThereRowFilled) {
+			this.score += 100;
+			OnScore(this.score);
+			this.grid = gridCopy;
+		}
 	}
 
 	draw(piece) {
