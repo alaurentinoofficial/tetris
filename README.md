@@ -91,7 +91,9 @@ Like the image represented below:
 <br>
 <br>
 <br>
+
 ## Link para Jogar
+
 https://thetetris.herokuapp.com
 
 # Developed by
