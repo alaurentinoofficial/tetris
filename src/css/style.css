@@ -1,0 +1,64 @@
+* {
+	font-family: 'Press Start 2P', cursive;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: 320px 200px;
+	color: #182d3d;
+}
+
+.right-column {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 300px;
+
+	color: #ffffff;
+}
+
+.game-board {
+	border: solid 2px;
+}
+
+.play-button {
+	display: block;
+	width: 100%;
+	background-color: #00cf53;
+	font-size: 16px;
+	padding: 12px 30px;
+	cursor: pointer;
+	border: none;
+	color: #ffffff;
+	transition: all .5s ease;
+	box-shadow: 0 20px 5px -10px rgba(#000000, 0.4);
+}
+
+.play-button:hover {
+	background-color: #1f964e;
+}
+
+body {
+	background-color: #182d3d;
+}
+
+canvas {
+	background-color: #11212c;
+
+	border-radius: 4px;
+
+	-webkit-box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.5);
+	-moz-box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.5);
+	box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.5);
+}
+
+canvas#next {
+	padding-top: 40px;
+	padding-right: 10px;
+
+	border-radius: 4px;
+
+	-webkit-box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.3);
+	-moz-box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.3);
+	box-shadow: inset 0px 0px 20px -4px rgba(0,0,0,0.3);
+}

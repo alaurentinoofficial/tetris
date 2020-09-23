@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" />
+		<link rel="stylesheet" href="css/style.css">
+		</link>
+		<script src="js/constants.js" charset="utf-8"></script>
+		<script src="js/utils.js" charset="utf-8"></script>
+		<script src="js/Piece.js" charset="utf-8"></script>
+		<script src="js/Tile.js" charset="utf-8"></script>
+		<script src="js/Pawn.js" charset="utf-8"></script>
+		<script src="js/PieceFactory.js" charset="utf-8"></script>
+		<script src="js/board.js" charset="utf-8"></script>
+		<script src="js/app.js" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<div class="grid">
+			<canvas id="board" class="game-board"></canvas>
+			<div class="right-column">
+				<div>
+					<h1>TETRIS</h1>
+					<p>Score: <span id="score">0</span></p>
+					<p>Lines: <span id="lines">0</span></p>
+					<p>Level: <span id="level">0</span></p>
+					<canvas id="next" class="next"></canvas>
+				</div>
+				<button onclick="play()" class="play-button">Play</button>
+			</div>
+		</div>
+	</body>
+</html>
