@@ -13,18 +13,23 @@
 		<script src="js/app.js" charset="utf-8"></script>
 	</head>
 
-	<body>
+	<body id="gameState" class="stoped">
 		<div class="grid">
 			<canvas id="board" class="game-board"></canvas>
 			<div class="right-column">
 				<div>
 					<h1>TETRIS</h1>
 					<p>Score: <span id="score">0</span></p>
-					<p>Lines: <span id="lines">0</span></p>
 					<p>Level: <span id="level">0</span></p>
 					<canvas id="next" class="next"></canvas>
 				</div>
-				<button onclick="play()" class="play-button">Play</button>
+				<div class="on-stoped">
+					<button onclick="play()" class="play-button button">Play</button>	
+				</div>
+				<div class="row on-gaming-paused">
+					<button onclick="pauseResume()" class="pause-button button"><span class="on-paused">Resume</span><span class="on-gaming">Pause</span></button>
+					<button onclick="stop()" class="stop-button button">Stop</button>
+				</div>
 			</div>
 		</div>
 	</body>
