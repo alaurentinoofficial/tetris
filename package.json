@@ -1,0 +1,28 @@
+{
+  "name": "tetris",
+  "version": "1.0.0",
+  "description": "![](./assets/game.png)",
+  "main": "server.js",
+  "scripts": {
+    "test": "exit 0",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alaurentinoofficial/tetris.git"
+  },
+  "keywords": [
+    "Tetris",
+    "game",
+    "canvas"
+  ],
+  "author": "alaurentinoofficial, JacksonMaths, joaoguedesmg, jheltonap",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alaurentinoofficial/tetris/issues"
+  },
+  "homepage": "https://github.com/alaurentinoofficial/tetris#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
