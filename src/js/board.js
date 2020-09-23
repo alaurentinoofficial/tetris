@@ -23,6 +23,9 @@ class Board {
     }
     
     AddTile(x, y, tile) {
+        if (this.grid[y][x] != null)
+            throw "Position already taken!";
+        
         this.grid[y][x] = tile;
     }
 
