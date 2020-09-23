@@ -16,6 +16,7 @@ function bounceError(x) {
 }
 
 function pieceAboveFloor(positionY) {
+    //console.log("Colisão")
     return positionY < ROWS;
 }
 
