@@ -17,6 +17,8 @@ async function play() {
     SetState(GameState.GAMING);
     SetGameOverModalState(false);
 
+    gameOverSoundTrack.pause();
+    gameOverSoundTrack.currentTime = 0;
     mainSoundTrack.play();
 
     while(GetState() == GameState.GAMING) {
