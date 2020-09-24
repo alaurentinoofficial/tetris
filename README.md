@@ -11,11 +11,6 @@
 
 https://thetetris.herokuapp.com
 
-## Link to Play
-
-https://thetetris.herokuapp.com
-
-<br>
 <br>
 
 ![](./assets/game.png)
