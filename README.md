@@ -1,6 +1,15 @@
 # Tetris
-[![Version](https://img.shields.io/badge/Version-0.3-green.svg)](https://thetetris.herokuapp.com/)
-[![Project](https://img.shields.io/badge/Project-Link-blue.svg)](https://thetetris.herokuapp.com/)
+[![Version](https://img.shields.io/badge/Version-0.3-blue.svg)]()
+[![Project](https://img.shields.io/badge/Medium-Link-dgreen.svg)](https://medium.com/@alaurentinoofficial/tetris-utilizando-canvas-e-javascript-43a082556ba5
+)
+
+<br>
+<br>
+<br>
+
+## Link to Play
+
+https://thetetris.herokuapp.com
 
 <br>
 
