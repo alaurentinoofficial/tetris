@@ -14,7 +14,7 @@ class Tile {
         context.fillStyle = this.fillColor;
         context.strokeStyle = this.strokeColor;
 
-        let cornerRadius = 0.1;
+        let cornerRadius = 0.17;
         let rectWidth = 0.9;
         let rectHeight = 0.9;
         let rectX = x + 0.05;
