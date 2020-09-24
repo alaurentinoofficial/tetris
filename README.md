@@ -2,6 +2,11 @@
 [![Version](https://img.shields.io/badge/Version-0.3-green.svg)](https://thetetris.herokuapp.com/)
 [![Project](https://img.shields.io/badge/Project-Link-blue.svg)](https://thetetris.herokuapp.com/)
 
+## Link to Play
+
+https://thetetris.herokuapp.com
+
+<br>
 <br>
 
 ![](./assets/game.png)
@@ -91,10 +96,6 @@ Like the image represented below:
 <br>
 <br>
 <br>
-
-## Link para Jogar
-
-https://thetetris.herokuapp.com
 
 # Developed by
 * Anderson Laurentino ([alaurentinoofficial](https://github.com/alaurentinoofficial))
