@@ -5,7 +5,7 @@ class Pawn {
         this.isBreak = false;
     }
 
-    Setup(piece, positionX = 4, positionY = 0) {
+    SetPiece(piece, positionX = 4, positionY = 0) {
         
         this.shape = piece.shape;
         this.tile = piece.tile;
@@ -16,7 +16,7 @@ class Pawn {
 
     DetectColision(x, y, shape = null, enableInsideWall = true) {
         if (!this.__setup)
-            throw "Please, configure first using the Controller.Setup([...])"
+            throw "Please, configure first using the Controller.SetPiece([...])"
 
         if (shape == null)
             shape = this.shape
@@ -33,7 +33,7 @@ class Pawn {
 
     Move(x, y) {
         if (!this.__setup)
-            throw "Please, configure first using the Controller.Setup([...])"
+            throw "Please, configure first using the Controller.SetPiece([...])"
         
         if(this.DetectColision(x, y)){
             if(y == 1){
@@ -54,7 +54,7 @@ class Pawn {
 
     Rotate() {
         if (!this.__setup)
-            throw "Please, configure first using the Controller.Setup([...])"
+            throw "Please, configure first using the Controller.SetPiece([...])"
 
         // 90° rotation
 		let rotShape = transpose([...this.shape])
@@ -83,7 +83,7 @@ class Pawn {
 
     Draw(context) {
         if (!this.__setup)
-            throw "Please, configure first using the Controller.Setup([...])"
+            throw "Please, configure first using the Controller.SetPiece([...])"
         
         this.shape.forEach((row, y) => {
             row.forEach((value, x) => {
@@ -96,7 +96,7 @@ class Pawn {
 
     ReleaseTiles() {
         if (!this.__setup)
-            throw "Please, configure first using the Controller.Setup([...])"
+            throw "Please, configure first using the Controller.SetPiece([...])"
         
         this.__setup = false;
 

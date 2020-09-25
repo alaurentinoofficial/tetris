@@ -10,20 +10,26 @@ let gameState;
 let mainSoundTrack;
 let gameOverSoundTrack;
 let gameOverModal;
+let score = 0;
+
+function addScore(value) {
+    score += value;
+    SetScore(score);
+}
 
 async function play() {
-    board = new Board();
+    board = new Board(addScore);
     pawn = new Pawn(board);
     SetState(GameState.GAMING);
     SetGameOverModalState(false);
 
-    gameOverSoundTrack.pause();
-    gameOverSoundTrack.currentTime = 0;
-    mainSoundTrack.play();
+    console.log(AudioMixer.GetInstance().GetAudios()["main"]);
+    AudioMixer.GetInstance().GetAudios()["gameOver"].Stop();
+    AudioMixer.GetInstance().GetAudios()["main"].Play();
 
     while(GetState() == GameState.GAMING) {
         let piece = {...next_piece}
-        pawn.Setup(piece, 3, 0);
+        pawn.SetPiece(piece, 3, 0);
 
         while(JSON.stringify(piece.shape) == JSON.stringify(next_piece.shape))
             next_piece = new PieceFactory();
@@ -38,8 +44,6 @@ async function play() {
             
             Clear();
             board.Draw(mainContext);
-            
-            SetScore(board.score);
         }
     }
 }
@@ -47,11 +51,11 @@ async function play() {
 function pauseResume() {
     if (GetState() == GameState.PAUSED) {
         SetState(GameState.GAMING);
-        mainSoundTrack.play();
+        AudioMixer.GetInstance().GetAudios()["main"].Play();
     }
     else if (GetState() == GameState.GAMING) {
         SetState(GameState.PAUSED);
-        mainSoundTrack.pause();
+        AudioMixer.GetInstance().GetAudios()["main"].Pause();
     }
 }
 
@@ -61,22 +65,19 @@ function stop() {
 }
 
 function exit() {
-    gameOverSoundTrack.pause();
-    gameOverSoundTrack.currentTime = 0;
+    AudioMixer.GetInstance().GetAudios()["gameOver"].Stop();
     SetGameOverModalState(false);
 }
 
 async function GameOver() {
-    mainSoundTrack.pause();
-    mainSoundTrack.currentTime = 0;
-    gameOverSoundTrack.play();
+    AudioMixer.GetInstance().GetAudios()["main"].Pause();
+    AudioMixer.GetInstance().GetAudios()["gameOver"].Play();
     SetGameOverModalState(true);
     stop();
 }
 
 function Reset() {
-    mainSoundTrack.pause();
-    mainSoundTrack.currentTime = 0;
+    AudioMixer.GetInstance().GetAudios()["main"].Stop();
     SetScore(0);
     Clear();
     next_piece = new PieceFactory();
@@ -120,7 +121,7 @@ async function Gravity() {
 }
 
 function SetScore(point) {
-    scoreTxt.innerHTML = point; 
+    scoreTxt.innerHTML = point;
 }
 
 function SetState(state) {
@@ -147,6 +148,9 @@ window.onload = () => {
 
     gameOverSoundTrack = document.getElementById("damage-soundtrack");
     gameOverModal = document.getElementById("game-over-modal");
+
+    AudioMixer.GetInstance().AddAudio("main", mainSoundTrack);
+    AudioMixer.GetInstance().AddAudio("gameOver", gameOverSoundTrack);
 
     let mainCanvas = document.getElementById('board');
     mainContext = mainCanvas.getContext('2d');

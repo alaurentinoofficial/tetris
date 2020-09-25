@@ -1,11 +1,11 @@
 class Board {
 
-    constructor() {
+    constructor(AddPointCb) {
         this.Start();
+        this.AddPointCb = AddPointCb;
     }
 
     Start() {
-        this.score = 0;
         this.grid = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
     }
 
@@ -15,7 +15,7 @@ class Board {
         gridCopy = gridCopy.filter(row => row.filter(x => x != null).length != row.length);
 
         while (gridCopy.length < this.grid.length) {
-            this.score += 100;
+            this.AddPointCb(100);
             gridCopy.unshift(Array(COLS).fill(null));
         }
 
