@@ -49,6 +49,26 @@ var GameManager = (function () {
         return instance.level;
     }
 
+    async function GravityAsync(cb) {
+
+        while(instance.pawn.AddForce(0,1) && instance.GetState() != GameState.STOPED) {
+            if(cb)
+                cb();
+            
+            // Wait if the game is paused
+            while(instance.GetState() == GameState.PAUSED)
+                await sleep(300);
+            
+            await sleep(1000);
+        }
+    
+        // Return false if the game ended
+        if(instance.GetState() == GameState.STOPED)
+            return false;
+    
+        return true;
+    }
+
  
     function constructor() {
         let board = new Board();
@@ -70,6 +90,7 @@ var GameManager = (function () {
             , GetPawn: GetPawn
             , GetLevel: GetLevel
             , SetLevel: SetLevel
+            , GravityAsync: GravityAsync
             , OnChangeStateEvent: function () {}
         };
 

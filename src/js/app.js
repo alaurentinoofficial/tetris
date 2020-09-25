@@ -18,10 +18,13 @@ function AddScore(value) {
 }
 
 async function play() {
-    SetGameOverModalState(false);
-
+    //Start the game
     GameManager.GetInstance().Start();
+
+    // Stop the game over music
     AudioMixer.GetInstance().GetAudios()["gameOver"].Stop();
+
+    // Play the game music
     AudioMixer.GetInstance().GetAudios()["main"].Play();
 
     while(true) {
@@ -29,34 +32,34 @@ async function play() {
         let piece = {...next_piece}
         GameManager.GetInstance().GetPawn().SetPiece(piece, 3, 0);
 
-        console.log(GameManager.GetInstance().GetPawn().shape)
-
         // Wait the next random piece be different than actual
         while(JSON.stringify(piece.shape) == JSON.stringify(next_piece.shape))
             next_piece = new PieceFactory();
 
-        // Check if the game alrady ended
-        if (!await GravityThread()) {
+        // Create the gravity to the Piece until colide (return true) or reset game (return false)
+        // Pass in parameter a call back funtion to draw the frame for each step
+        if (!await GameManager.GetInstance().GravityAsync(DrawFrame))
             return;
-        }
         
-        // Check if the Game Over
+        // Try to pass the tiles to the board, if they colide return the error and end the game
         try { GameManager.GetInstance().GetPawn().ReleaseTiles(); }
         catch(e) { GameOver(); return; }
 
-        // Run check to gets score
+        // Test if the play scored and pass the call back function to add points
         GameManager.GetInstance().GetBoard().ValidateFillOneLine(AddScore);
         
-        Clear();
-        Draw();
+        DrawFrame();
     }
 }
 
 function pauseResume() {
+    // If is paused, resume the game
     if (GameManager.GetInstance().GetState() == GameState.PAUSED) {
         GameManager.GetInstance().SetState(GameState.GAMING);
         AudioMixer.GetInstance().GetAudios()["main"].Play();
     }
+
+    // Otherwise if is in game then pause the game
     else if (GameManager.GetInstance().GetState() == GameState.GAMING) {
         GameManager.GetInstance().SetState(GameState.PAUSED);
         AudioMixer.GetInstance().GetAudios()["main"].Pause();
@@ -70,7 +73,6 @@ function stop() {
 function exit() {
     stop();
     AudioMixer.GetInstance().GetAudios()["gameOver"].Stop();
-    SetGameOverModalState(false);
     Reset();
 }
 
@@ -87,10 +89,14 @@ async function GameOver() {
 }
 
 function Reset() {
-    console.log("a")
-    AudioMixer.GetInstance().GetAudios()["main"].Stop();
+    // Disable the modal
+    SetGameOverModalState(false);
+
     SetScore(0);
     Clear();
+
+    AudioMixer.GetInstance().GetAudios()["main"].Stop();
+
     next_piece = new PieceFactory();
     next_piece.Draw(nextContext, 3, 0);
 }
@@ -109,25 +115,6 @@ function Draw() {
 function DrawFrame() {
     Clear();
     Draw();
-}
-
-async function GravityThread() {
-
-    while(PressKeyListeners[KEY.DOWN]() && GameManager.GetInstance().GetState() != GameState.STOPED) {
-        DrawFrame();
-        
-        // Wait if the game is paused
-        while(GameManager.GetInstance().GetState() == GameState.PAUSED)
-            await sleep(300);
-        
-        await sleep(1000);
-    }
-
-    // Return false if the game ended
-    if(GameManager.GetInstance().GetState() == GameState.STOPED)
-        return false;
-
-    return true;
 }
 
 function SetScore(point) {
