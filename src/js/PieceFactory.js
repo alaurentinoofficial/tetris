@@ -1,6 +1,7 @@
 function PieceFactory(ctx, board) {
     let I = new Piece([
-        [1, 1, 1, 1]
+        [1, 1, 1, 1],
+        [0, 0, 0, 0]
     ], new Tile("#00c3ff", "#0a9ac7", "rgba(0, 195, 255, 0.4)"));
     
     let J = new Piece([

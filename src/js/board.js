@@ -1,25 +1,28 @@
 class Board {
 
-    constructor(AddPointCb) {
+    constructor() {
         this.Start();
-        this.AddPointCb = AddPointCb;
     }
 
     Start() {
         this.grid = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
     }
 
-    ValidateFillOneLine() {
+    ValidateFillOneLine(cb) {
         let gridCopy = [...this.grid]
 
         gridCopy = gridCopy.filter(row => row.filter(x => x != null).length != row.length);
 
+        let totalPoint = 0;
         while (gridCopy.length < this.grid.length) {
-            this.AddPointCb(100);
+            totalPoint += 100;
             gridCopy.unshift(Array(COLS).fill(null));
         }
 
         this.grid = gridCopy;
+
+        if (cb && totalPoint != 0)
+            cb(totalPoint);
     }
 
     AddTile(x, y, tile) {

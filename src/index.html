@@ -10,6 +10,7 @@
 		<script src="js/Pawn.js" charset="utf-8"></script>
 		<script src="js/PieceFactory.js" charset="utf-8"></script>
 		<script src="js/Board.js" charset="utf-8"></script>
+		<script src="js/GameManager.js" charset="utf-8"></script>
 		<script src="js/AudioMixer.js" charset="utf-8"></script>
 		<script src="js/app.js" charset="utf-8"></script>
 	</head>
@@ -19,7 +20,7 @@
 			<div class="modal">
 				<div class="modal-text">Game Over</div>
 				<div class="row modal-btns">
-					<button onclick="play()" class="play-button button">Play Again</button>
+					<button onclick="playAgain()" class="play-button button">Play Again</button>
 					<button onclick="exit()" class="stop-button button">Exit</button>
 				</div>
 			</div>
@@ -37,7 +38,7 @@
 				</div>
 				<div class="row on-gaming-paused">
 					<button onclick="pauseResume()" class="pause-button button"><span class="on-paused">Resume</span><span class="on-gaming">Pause</span></button>
-					<button onclick="stop()" class="stop-button button">Reset</button>
+					<button onclick="exit()" class="stop-button button">Reset</button>
 				</div>
 				<audio id="main-soundtrack">
 					<source src="sounds/soundtrack.mp3" loop type="audio/mpeg">

@@ -12,61 +12,71 @@ let gameOverSoundTrack;
 let gameOverModal;
 let score = 0;
 
-function addScore(value) {
+function AddScore(value) {
     score += value;
     SetScore(score);
 }
 
 async function play() {
-    board = new Board(addScore);
-    pawn = new Pawn(board);
-    SetState(GameState.GAMING);
     SetGameOverModalState(false);
 
-    console.log(AudioMixer.GetInstance().GetAudios()["main"]);
+    GameManager.GetInstance().Start();
     AudioMixer.GetInstance().GetAudios()["gameOver"].Stop();
     AudioMixer.GetInstance().GetAudios()["main"].Play();
 
-    while(GetState() == GameState.GAMING) {
+    while(true) {
+        // Set the new Piece into Pawn Controller
         let piece = {...next_piece}
-        pawn.SetPiece(piece, 3, 0);
+        GameManager.GetInstance().GetPawn().SetPiece(piece, 3, 0);
 
+        console.log(GameManager.GetInstance().GetPawn().shape)
+
+        // Wait the next random piece be different than actual
         while(JSON.stringify(piece.shape) == JSON.stringify(next_piece.shape))
             next_piece = new PieceFactory();
 
-        await Gravity();
-
-        if(GetState() == GameState.GAMING) {
-            try { pawn.ReleaseTiles(); }
-            catch(e) { GameOver(); return; }
-
-            board.ValidateFillOneLine();
-            
-            Clear();
-            board.Draw(mainContext);
+        // Check if the game alrady ended
+        if (!await GravityThread()) {
+            return;
         }
+        
+        // Check if the Game Over
+        try { GameManager.GetInstance().GetPawn().ReleaseTiles(); }
+        catch(e) { GameOver(); return; }
+
+        // Run check to gets score
+        GameManager.GetInstance().GetBoard().ValidateFillOneLine(AddScore);
+        
+        Clear();
+        Draw();
     }
 }
 
 function pauseResume() {
-    if (GetState() == GameState.PAUSED) {
-        SetState(GameState.GAMING);
+    if (GameManager.GetInstance().GetState() == GameState.PAUSED) {
+        GameManager.GetInstance().SetState(GameState.GAMING);
         AudioMixer.GetInstance().GetAudios()["main"].Play();
     }
-    else if (GetState() == GameState.GAMING) {
-        SetState(GameState.PAUSED);
+    else if (GameManager.GetInstance().GetState() == GameState.GAMING) {
+        GameManager.GetInstance().SetState(GameState.PAUSED);
         AudioMixer.GetInstance().GetAudios()["main"].Pause();
     }
 }
 
 function stop() {
-    SetState(GameState.STOPED);
-    Reset();
+    GameManager.GetInstance().SetState(GameState.STOPED);
 }
 
 function exit() {
+    stop();
     AudioMixer.GetInstance().GetAudios()["gameOver"].Stop();
     SetGameOverModalState(false);
+    Reset();
+}
+
+function playAgain() {
+    Reset();
+    play();
 }
 
 async function GameOver() {
@@ -77,6 +87,7 @@ async function GameOver() {
 }
 
 function Reset() {
+    console.log("a")
     AudioMixer.GetInstance().GetAudios()["main"].Stop();
     SetScore(0);
     Clear();
@@ -90,8 +101,8 @@ function Clear() {
 }
 
 function Draw() {
-    pawn.Draw(mainContext);
-    board.Draw(mainContext);
+    GameManager.GetInstance().GetPawn().Draw(mainContext);
+    GameManager.GetInstance().GetBoard().Draw(mainContext);
     next_piece.Draw(nextContext, 3, 0);
 }
 
@@ -100,24 +111,23 @@ function DrawFrame() {
     Draw();
 }
 
-async function Gravity() {
-    let iterations = 0;
+async function GravityThread() {
 
-    let keepMoving = PressKeyListeners[KEY.DOWN]();
-
-    while(keepMoving && GetState() != GameState.STOPED) {
+    while(PressKeyListeners[KEY.DOWN]() && GameManager.GetInstance().GetState() != GameState.STOPED) {
         DrawFrame();
-
-        await sleep(1000);
         
-        while(GetState() != GameState.GAMING && GetState() != GameState.STOPED)
+        // Wait if the game is paused
+        while(GameManager.GetInstance().GetState() == GameState.PAUSED)
             await sleep(300);
-
-        iterations += 1;
-        keepMoving = PressKeyListeners[KEY.DOWN]();
+        
+        await sleep(1000);
     }
 
-    return iterations;
+    // Return false if the game ended
+    if(GameManager.GetInstance().GetState() == GameState.STOPED)
+        return false;
+
+    return true;
 }
 
 function SetScore(point) {
@@ -168,11 +178,13 @@ window.onload = () => {
 
     nextContext.scale(BLOCK_SIZE, BLOCK_SIZE);
 
+    GameManager.GetInstance().OnChangeStateEvent = SetState
+
     Reset();
 };
 
 document.addEventListener('keydown', event => {
-    if(PressKeyListeners[event.keyCode] && pawn) {
+    if(PressKeyListeners[event.keyCode]) {
         event.preventDefault();
         PressKeyListeners[event.keyCode]();
         DrawFrame();
@@ -180,8 +192,8 @@ document.addEventListener('keydown', event => {
 });
 
 const PressKeyListeners = {
-    [KEY.UP]:    () => GetState() == GameState.GAMING ? pawn.Rotate() : true,
-    [KEY.LEFT]:  () => GetState() == GameState.GAMING ? pawn.AddForce(-1,0) : true,
-    [KEY.RIGHT]: () => GetState() == GameState.GAMING ? pawn.AddForce(1,0) : true,
-    [KEY.DOWN]:  () => GetState() == GameState.GAMING ? pawn.AddForce(0,1) : true
+    [KEY.UP]:    () => GameManager.GetInstance().GetState() == GameState.GAMING ? GameManager.GetInstance().GetPawn().Rotate() : true,
+    [KEY.LEFT]:  () => GameManager.GetInstance().GetState() == GameState.GAMING ? GameManager.GetInstance().GetPawn().AddForce(-1,0) : true,
+    [KEY.RIGHT]: () => GameManager.GetInstance().GetState() == GameState.GAMING ? GameManager.GetInstance().GetPawn().AddForce(1,0) : true,
+    [KEY.DOWN]:  () => GameManager.GetInstance().GetState() == GameState.GAMING ? GameManager.GetInstance().GetPawn().AddForce(0,1) : true
 };

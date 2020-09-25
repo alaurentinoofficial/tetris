@@ -83,7 +83,7 @@ class Pawn {
 
     Draw(context) {
         if (!this.__setup)
-            throw "Please, configure first using the Controller.SetPiece([...])"
+            return;
         
         this.shape.forEach((row, y) => {
             row.forEach((value, x) => {
