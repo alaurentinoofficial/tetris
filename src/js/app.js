@@ -191,9 +191,9 @@ const PressKeyListeners = {
 }
 
 const PressKeyListenersMovements = {
-    [KEY.UP]:    () => GameManager.GetInstance().GetState() == GameState.GAMING ? GameManager.GetInstance().GetPawn().Rotate() : true,
-    [KEY.LEFT]:  () => GameManager.GetInstance().GetState() == GameState.GAMING ? GameManager.GetInstance().GetPawn().AddForce(-1,0) : true,
-    [KEY.RIGHT]: () => GameManager.GetInstance().GetState() == GameState.GAMING ? GameManager.GetInstance().GetPawn().AddForce(1,0) : true,
-    [KEY.DOWN]:  () => GameManager.GetInstance().GetState() == GameState.GAMING ? GameManager.GetInstance().GetPawn().AddForce(0,1) : true
+    [KEY.UP]:    () => { if(GameManager.GetInstance().GetState() == GameState.GAMING) GameManager.GetInstance().GetPawn().Rotate()},
+    [KEY.LEFT]:  () => { if(GameManager.GetInstance().GetState() == GameState.GAMING) GameManager.GetInstance().GetPawn().AddForce(-1,0)},
+    [KEY.RIGHT]: () => { if(GameManager.GetInstance().GetState() == GameState.GAMING) GameManager.GetInstance().GetPawn().AddForce(1,0)},
+    [KEY.DOWN]:  () => { if(GameManager.GetInstance().GetState() == GameState.GAMING) GameManager.GetInstance().GetPawn().AddForce(0,1)}
 };
 
