@@ -6,7 +6,9 @@ const KEY = {
 	UP: 38,
 	LEFT: 37,
 	RIGHT: 39,
-	DOWN: 40
+	DOWN: 40,
+	P: 80,
+	R: 82
 }
 
 Object.freeze(KEY);
