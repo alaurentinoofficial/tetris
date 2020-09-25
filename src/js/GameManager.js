@@ -52,12 +52,12 @@ var GameManager = (function () {
     async function GravityAsync(cb) {
 
         while(instance.pawn.AddForce(0,1) && instance.GetState() != GameState.STOPED) {
-            if(cb)
-                cb();
-            
             // Wait if the game is paused
             while(instance.GetState() == GameState.PAUSED)
                 await sleep(300);
+
+            if(cb && instance.GetState() != GameState.STOPED)
+                cb();
             
             await sleep(1000);
         }

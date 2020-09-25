@@ -64,6 +64,10 @@ function pauseResume() {
         GameManager.GetInstance().SetState(GameState.PAUSED);
         AudioMixer.GetInstance().GetAudios()["main"].Pause();
     }
+
+    else {
+        play();
+    }
 }
 
 function stop() {
@@ -171,16 +175,25 @@ window.onload = () => {
 };
 
 document.addEventListener('keydown', event => {
-    if(PressKeyListeners[event.keyCode]) {
+    if(PressKeyListenersMovements[event.keyCode]) {
         event.preventDefault();
-        PressKeyListeners[event.keyCode]();
+        PressKeyListenersMovements[event.keyCode]();
         DrawFrame();
+    }
+    else if(PressKeyListeners[event.keyCode]) {
+        PressKeyListeners[event.keyCode]();
     }
 });
 
 const PressKeyListeners = {
+    [KEY.P]: () => pauseResume(),
+    [KEY.R]: () => exit()
+}
+
+const PressKeyListenersMovements = {
     [KEY.UP]:    () => GameManager.GetInstance().GetState() == GameState.GAMING ? GameManager.GetInstance().GetPawn().Rotate() : true,
     [KEY.LEFT]:  () => GameManager.GetInstance().GetState() == GameState.GAMING ? GameManager.GetInstance().GetPawn().AddForce(-1,0) : true,
     [KEY.RIGHT]: () => GameManager.GetInstance().GetState() == GameState.GAMING ? GameManager.GetInstance().GetPawn().AddForce(1,0) : true,
     [KEY.DOWN]:  () => GameManager.GetInstance().GetState() == GameState.GAMING ? GameManager.GetInstance().GetPawn().AddForce(0,1) : true
 };
+
