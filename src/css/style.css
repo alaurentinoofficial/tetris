@@ -57,7 +57,6 @@
 	cursor: pointer;
 }
 
-
 .grid {
 	display: flex;
 	flex-direction: row;
@@ -113,15 +112,15 @@
 }
 
 .play-button {
-	border: 4px solid #00ff5e;
-	background-color: #08d152;
+	border: 4px solid rgb(0, 255, 94);
+	background-color: #0dc450;
 }
 
 .play-button:hover {
-	background-color: #0bb349;
-	-webkit-box-shadow: 0px 0px 10px -4px rgba(0, 0, 0, 0.3);
-	-moz-box-shadow: 0px 0px 10px -4px rgba(0, 0, 0, 0.3);
-	box-shadow: 0px 0px 10px -4px rgba(0, 0, 0, 0.3);
+	background-color: #0ea144;
+	-webkit-box-shadow: 0px 0px 10px -4px rgba(0, 255, 94, 0.3);
+	-moz-box-shadow: 0px 0px 10px -4px rgba(0, 255, 94, 0.3);
+	box-shadow: 0px 0px 10px -4px rgba(0, 255, 94, 0.3);
 }
 
 .row {
@@ -156,7 +155,7 @@ canvas#next {
 	box-shadow: inset 0px 0px 20px -4px rgba(0, 0, 0, 0.3);
 }
 
-.on-txt { 
+.on-txt {
 	text-align: center;
 }
 
@@ -220,17 +219,30 @@ canvas#next {
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.6);
 	z-index: 1100;
-	display: flex;
 	justify-content: space-between;
 	display: none;
+	justify-content: center;
+	align-items: center;
 }
 
 .active#game-over-modal {
 	display: flex;
 }
 
+
+@keyframes growUp {
+	0% {
+		transform: perspective(300px) translateZ(-100px);
+	}
+	60% {
+		transform: perspective(300px) translateZ(50px);
+	}
+	100% {
+		transform: perspective(0px) translateZ(0px);
+	}
+}
+
 .modal {
-	margin: auto;
 	width: 450px;
 	height: 250px;
 	padding: 15px;
@@ -244,6 +256,7 @@ canvas#next {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	animation: growUp .7s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
 }
 
 .modal-title {
@@ -257,7 +270,7 @@ canvas#next {
 }
 
 .modal .button {
-	height: 50px;
+	height: 45px;
 	font-size: 12px;
 	flex-wrap: nowrap;
 	overflow-wrap: normal;
