@@ -1,50 +1,71 @@
 <html>
-	<head>
-		<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" />
-		<link rel="stylesheet" href="css/style.css">
-		</link>
-		<script src="js/constants.js" charset="utf-8"></script>
-		<script src="js/utils.js" charset="utf-8"></script>
-		<script src="js/Piece.js" charset="utf-8"></script>
-		<script src="js/Tile.js" charset="utf-8"></script>
-		<script src="js/Pawn.js" charset="utf-8"></script>
-		<script src="js/PieceFactory.js" charset="utf-8"></script>
-		<script src="js/board.js" charset="utf-8"></script>
-		<script src="js/app.js" charset="utf-8"></script>
-	</head>
 
-	<body id="gameState" class="stoped">
-		<div id="game-over-modal" class="">
-			<div class="modal">
-				<div class="modal-text">Game Over</div>
-				<div class="row modal-btns">
-					<button onclick="play()" class="play-button button">Play Again</button>
-					<button onclick="exit()" class="stop-button button">Exit</button>
-				</div>
+<head>
+	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" />
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="icon" type="image/png" href="imgs/favicon.png">
+	<title>The Tetris</title>
+	<script src="js/constants.js" charset="utf-8"></script>
+	<script src="js/utils.js" charset="utf-8"></script>
+	<script src="js/Piece.js" charset="utf-8"></script>
+	<script src="js/Tile.js" charset="utf-8"></script>
+	<script src="js/Pawn.js" charset="utf-8"></script>
+	<script src="js/PieceFactory.js" charset="utf-8"></script>
+	<script src="js/Board.js" charset="utf-8"></script>
+	<script src="js/GameManager.js" charset="utf-8"></script>
+	<script src="js/AudioMixer.js" charset="utf-8"></script>
+	<script src="js/app.js" charset="utf-8"></script>
+</head>
+
+<body id="gameState" class="stoped">
+	<div id="game-over-modal" class="">
+		<div class="modal">
+			<div class="modal-title">Game Over</div>
+			<div class="modal-text">
+				<p>
+					Score: <span id="modal-score">0</span>
+				</p>
+				<p>
+					Level: <span id="modal-level">0</span>
+				</p>
+			</div>
+			<div class="row modal-btns">
+				<button onclick="playAgain()" class="play-button button">Play Again</button>
+				<button onclick="exit()" class="stop-button button">Exit</button>
 			</div>
 		</div>
-		<div class="grid">
-			<canvas id="board" class="game-board"></canvas>
-			<div class="right-column">
-				<div>
-					<h1>TETRIS</h1>
-					<p>Score: <span id="score">0</span></p>
-					<canvas id="next" class="next"></canvas>
-				</div>
-				<div class="on-stoped">
-					<button onclick="play()" class="play-button button">Play</button>	
-				</div>
-				<div class="row on-gaming-paused">
-					<button onclick="pauseResume()" class="pause-button button"><span class="on-paused">Resume</span><span class="on-gaming">Pause</span></button>
-					<button onclick="stop()" class="stop-button button">Reset</button>
-				</div>
-				<audio id="main-soundtrack">
-					<source src="sounds/soundtrack.mp3" loop type="audio/mpeg">
-				</audio>
-				<audio id="damage-soundtrack">
-					<source src="sounds/damagecoda.mp3" loop type="audio/mpeg">
-				</audio>
+	</div>
+	<div class="grid">
+		<canvas id="board" class="game-board"></canvas>
+		<div class="right-column">
+			<div>
+				<h1>THE TETRIS</h1>
+				<p>Score: <span id="score">0</span></p>
+				<p>Level: <span id="level">0</span></p>
+				<canvas id="next" class="next"></canvas>
+			</div>
+			<div class="on-stoped">
+				<button onclick="play()" class="play-button button">Play</button>
+			</div>
+			<div class="row on-gaming-paused">
+				<button onclick="pauseResume()" class="pause-button button"><span class="on-txt on-paused">Resume</span><span
+						class="on-txt on-gaming">Pause</span></button>
+				<button onclick="exit()" class="stop-button button">Reset</button>
+			</div>
+			<audio id="main-soundtrack">
+				<source src="sounds/soundtrack.mp3" loop type="audio/mpeg">
+			</audio>
+			<audio id="damage-soundtrack">
+				<source src="sounds/damagecodafade.mp3" loop type="audio/mpeg">
+			</audio>
+		</div>
+		<div class="grid-audio-volume">
+			<div class="audio-volume">
+				<img src="imgs/volume.png" />
+				<input type="range" min="0" max="100" value="30" class="slider" id="audio-slider">
 			</div>
 		</div>
-	</body>
+	</div>
+</body>
+
 </html>

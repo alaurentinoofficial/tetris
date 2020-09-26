@@ -6,79 +6,106 @@ let next_piece;
 let mainContext;
 let nextContext;
 let scoreTxt;
+let levelTxt;
+let scoreModalTxt;
+let levelModalTxt;
 let gameState;
 let mainSoundTrack;
 let gameOverSoundTrack;
 let gameOverModal;
 
+function AddScore(value) {
+    GameManager.GetInstance().AddScore(value);
+    SetScore(GameManager.GetInstance().GetScore());
+    SetLevel(GameManager.GetInstance().GetLevel());
+}
+
 async function play() {
-    board = new Board();
-    pawn = new Pawn(board);
-    SetState(GameState.GAMING);
-    SetGameOverModalState(false);
+    //Start the game
+    GameManager.GetInstance().Start();
 
-    gameOverSoundTrack.pause();
-    gameOverSoundTrack.currentTime = 0;
-    mainSoundTrack.play();
+    // Stop the game over music
+    AudioMixer.GetInstance().GetAudios()["gameOver"].Stop();
 
-    while(GetState() == GameState.GAMING) {
+    // Play the game music
+    AudioMixer.GetInstance().GetAudios()["main"].Play();
+
+    while(true) {
+        // Set the new Piece into Pawn Controller
         let piece = {...next_piece}
-        pawn.Setup(piece, 3, 0);
+        GameManager.GetInstance().GetPawn().SetPiece(piece, 3, 0);
 
+        // Wait the next random piece be different than actual
         while(JSON.stringify(piece.shape) == JSON.stringify(next_piece.shape))
             next_piece = new PieceFactory();
 
-        await Gravity();
+        // Create the gravity to the Piece until colide (return true) or reset game (return false)
+        // Pass in parameter a call back funtion to draw the frame for each step
+        if (!await GameManager.GetInstance().GravityAsync(DrawFrame))
+            return;
+        
+        // Try to pass the tiles to the board, if they colide return the error and end the game
+        try { GameManager.GetInstance().GetPawn().ReleaseTiles(); }
+        catch(e) { GameOver(); return; }
 
-        if(GetState() == GameState.GAMING) {
-            try { pawn.ReleaseTiles(); }
-            catch(e) { GameOver(); return; }
-
-            board.ValidateFillOneLine();
-            
-            Clear();
-            board.Draw(mainContext);
-            
-            SetScore(board.score);
-        }
+        // Test if the play scored and pass the call back function to add points
+        GameManager.GetInstance().GetBoard().ValidateFillOneLine(AddScore);
+        
+        DrawFrame();
     }
 }
 
 function pauseResume() {
-    if (GetState() == GameState.PAUSED) {
-        SetState(GameState.GAMING);
-        mainSoundTrack.play();
+    // If is paused, resume the game
+    if (GameManager.GetInstance().GetState() == GameState.PAUSED) {
+        GameManager.GetInstance().SetState(GameState.GAMING);
+        AudioMixer.GetInstance().GetAudios()["main"].Play();
     }
-    else if (GetState() == GameState.GAMING) {
-        SetState(GameState.PAUSED);
-        mainSoundTrack.pause();
+
+    // Otherwise if is in game then pause the game
+    else if (GameManager.GetInstance().GetState() == GameState.GAMING) {
+        GameManager.GetInstance().SetState(GameState.PAUSED);
+        AudioMixer.GetInstance().GetAudios()["main"].Pause();
+    }
+
+    else {
+        play();
     }
 }
 
 function stop() {
-    SetState(GameState.STOPED);
-    Reset();
+    GameManager.GetInstance().SetState(GameState.STOPED);
 }
 
 function exit() {
-    gameOverSoundTrack.pause();
-    gameOverSoundTrack.currentTime = 0;
-    SetGameOverModalState(false);
+    stop();
+    AudioMixer.GetInstance().GetAudios()["gameOver"].Stop();
+    Reset();
+}
+
+function playAgain() {
+    Reset();
+    play();
 }
 
 async function GameOver() {
-    mainSoundTrack.pause();
-    mainSoundTrack.currentTime = 0;
-    gameOverSoundTrack.play();
+    AudioMixer.GetInstance().GetAudios()["main"].Pause();
+    AudioMixer.GetInstance().GetAudios()["gameOver"].Play();
     SetGameOverModalState(true);
     stop();
 }
 
 function Reset() {
-    mainSoundTrack.pause();
-    mainSoundTrack.currentTime = 0;
+    // Disable the modal
+    SetGameOverModalState(false);
+
+    GameManager.GetInstance().SetScore(0);
     SetScore(0);
+    SetLevel(1);
     Clear();
+
+    AudioMixer.GetInstance().GetAudios()["main"].Stop();
+
     next_piece = new PieceFactory();
     next_piece.Draw(nextContext, 3, 0);
 }
@@ -89,8 +116,8 @@ function Clear() {
 }
 
 function Draw() {
-    pawn.Draw(mainContext);
-    board.Draw(mainContext);
+    GameManager.GetInstance().GetPawn().Draw(mainContext);
+    GameManager.GetInstance().GetBoard().Draw(mainContext);
     next_piece.Draw(nextContext, 3, 0);
 }
 
@@ -99,28 +126,14 @@ function DrawFrame() {
     Draw();
 }
 
-async function Gravity() {
-    let iterations = 0;
-
-    let keepMoving = PressKeyListeners[KEY.DOWN]();
-
-    while(keepMoving && GetState() != GameState.STOPED) {
-        DrawFrame();
-
-        await sleep(1000);
-        
-        while(GetState() != GameState.GAMING && GetState() != GameState.STOPED)
-            await sleep(300);
-
-        iterations += 1;
-        keepMoving = PressKeyListeners[KEY.DOWN]();
-    }
-
-    return iterations;
+function SetScore(point) {
+    scoreTxt.innerHTML = point;
+    scoreModalTxt.innerHTML = point;
 }
 
-function SetScore(point) {
-    scoreTxt.innerHTML = point; 
+function SetLevel(level) {
+    levelTxt.innerHTML = level;
+    levelModalTxt.innerHTML = level;
 }
 
 function SetState(state) {
@@ -140,6 +153,11 @@ function SetGameOverModalState(state) {
 
 window.onload = () => {
     scoreTxt = document.getElementById("score");
+    levelTxt = document.getElementById("level");
+
+    scoreModalTxt = document.getElementById("modal-score");
+    levelModalTxt = document.getElementById("modal-level");
+
     gameState = document.getElementById("gameState");
     mainSoundTrack = document.getElementById("main-soundtrack");
     mainSoundTrack.loop = true;
@@ -147,6 +165,9 @@ window.onload = () => {
 
     gameOverSoundTrack = document.getElementById("damage-soundtrack");
     gameOverModal = document.getElementById("game-over-modal");
+
+    AudioMixer.GetInstance().AddAudio("main", mainSoundTrack);
+    AudioMixer.GetInstance().AddAudio("gameOver", gameOverSoundTrack);
 
     let mainCanvas = document.getElementById('board');
     mainContext = mainCanvas.getContext('2d');
@@ -164,20 +185,43 @@ window.onload = () => {
 
     nextContext.scale(BLOCK_SIZE, BLOCK_SIZE);
 
+    GameManager.GetInstance().OnChangeStateEvent = SetState;
+
     Reset();
+
+    let slider = document.getElementById("audio-slider");
+    let onMove = function() {
+        var x = slider.value;
+        AudioMixer.GetInstance().GetAudios()["main"].component.volume = x / 100;
+        AudioMixer.GetInstance().GetAudios()["gameOver"].component.volume = Math.min(x / 100 * 1.5, 1);
+
+        var color = `linear-gradient(90deg, #00ff5e ${x}%, rgb(200, 200, 200) ${x}%)`;
+        slider.style.background = color;
+    };
+    onMove();
+    slider.addEventListener("mousemove", onMove)
 };
 
 document.addEventListener('keydown', event => {
-    if(PressKeyListeners[event.keyCode] && pawn) {
+    if(PressKeyListenersMovements[event.keyCode]) {
         event.preventDefault();
-        PressKeyListeners[event.keyCode]();
+        PressKeyListenersMovements[event.keyCode]();
         DrawFrame();
+    }
+    else if(PressKeyListeners[event.keyCode]) {
+        PressKeyListeners[event.keyCode]();
     }
 });
 
 const PressKeyListeners = {
-    [KEY.UP]:    () => GetState() == GameState.GAMING ? pawn.Rotate() : true,
-    [KEY.LEFT]:  () => GetState() == GameState.GAMING ? pawn.AddForce(-1,0) : true,
-    [KEY.RIGHT]: () => GetState() == GameState.GAMING ? pawn.AddForce(1,0) : true,
-    [KEY.DOWN]:  () => GetState() == GameState.GAMING ? pawn.AddForce(0,1) : true
+    [KEY.P]: () => pauseResume(),
+    [KEY.R]: () => exit()
+}
+
+const PressKeyListenersMovements = {
+    [KEY.UP]:    () => { if(GameManager.GetInstance().GetState() == GameState.GAMING) GameManager.GetInstance().GetPawn().Rotate()},
+    [KEY.LEFT]:  () => { if(GameManager.GetInstance().GetState() == GameState.GAMING) GameManager.GetInstance().GetPawn().AddForce(-1,0)},
+    [KEY.RIGHT]: () => { if(GameManager.GetInstance().GetState() == GameState.GAMING) GameManager.GetInstance().GetPawn().AddForce(1,0)},
+    [KEY.DOWN]:  () => { if(GameManager.GetInstance().GetState() == GameState.GAMING) GameManager.GetInstance().GetPawn().AddForce(0,1)}
 };
+
