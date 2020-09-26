@@ -23,6 +23,8 @@ function AddScore(value) {
 async function play() {
     //Start the game
     GameManager.GetInstance().Start();
+    
+    SetGameOverModalState(false);
 
     // Stop the game over music
     AudioMixer.GetInstance().GetAudios()["gameOver"].Stop();

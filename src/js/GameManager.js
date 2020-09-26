@@ -60,7 +60,7 @@ var GameManager = (function () {
             if(cb && instance.GetState() != GameState.STOPED)
                 cb();
             
-            await sleep(1000 - (50 * instance.level));
+            await sleep(700 - (50 * instance.level));
         }
     
         // Return false if the game ended
