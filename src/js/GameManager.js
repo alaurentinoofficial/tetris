@@ -3,10 +3,11 @@ var GameManager = (function () {
 
     function SetScore(new_score) {
         instance.score = new_score;
+        instance.SetLevel(parseInt(new_score / 1000) + 1);
     }
 
     function AddScore(delta_score) {
-        instance.score += delta_score;
+        instance.SetScore(instance.score + delta_score);
     }
 
     function GetScore() {
@@ -59,7 +60,7 @@ var GameManager = (function () {
             if(cb && instance.GetState() != GameState.STOPED)
                 cb();
             
-            await sleep(1000);
+            await sleep(1000 - (50 * instance.level));
         }
     
         // Return false if the game ended

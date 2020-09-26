@@ -15,7 +15,7 @@ class Board {
 
         let totalPoint = 0;
         while (gridCopy.length < this.grid.length) {
-            totalPoint += 100;
+            totalPoint += 200;
             gridCopy.unshift(Array(COLS).fill(null));
         }
 

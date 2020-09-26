@@ -6,15 +6,18 @@ let next_piece;
 let mainContext;
 let nextContext;
 let scoreTxt;
+let levelTxt;
+let scoreModalTxt;
+let levelModalTxt;
 let gameState;
 let mainSoundTrack;
 let gameOverSoundTrack;
 let gameOverModal;
-let score = 0;
 
 function AddScore(value) {
-    score += value;
-    SetScore(score);
+    GameManager.GetInstance().AddScore(value);
+    SetScore(GameManager.GetInstance().GetScore());
+    SetLevel(GameManager.GetInstance().GetLevel());
 }
 
 async function play() {
@@ -96,7 +99,9 @@ function Reset() {
     // Disable the modal
     SetGameOverModalState(false);
 
+    GameManager.GetInstance().SetScore(0);
     SetScore(0);
+    SetLevel(1);
     Clear();
 
     AudioMixer.GetInstance().GetAudios()["main"].Stop();
@@ -123,6 +128,12 @@ function DrawFrame() {
 
 function SetScore(point) {
     scoreTxt.innerHTML = point;
+    scoreModalTxt.innerHTML = point;
+}
+
+function SetLevel(level) {
+    levelTxt.innerHTML = level;
+    levelModalTxt.innerHTML = level;
 }
 
 function SetState(state) {
@@ -142,6 +153,11 @@ function SetGameOverModalState(state) {
 
 window.onload = () => {
     scoreTxt = document.getElementById("score");
+    levelTxt = document.getElementById("level");
+
+    scoreModalTxt = document.getElementById("modal-score");
+    levelModalTxt = document.getElementById("modal-level");
+
     gameState = document.getElementById("gameState");
     mainSoundTrack = document.getElementById("main-soundtrack");
     mainSoundTrack.loop = true;
@@ -169,9 +185,21 @@ window.onload = () => {
 
     nextContext.scale(BLOCK_SIZE, BLOCK_SIZE);
 
-    GameManager.GetInstance().OnChangeStateEvent = SetState
+    GameManager.GetInstance().OnChangeStateEvent = SetState;
 
     Reset();
+
+    let slider = document.getElementById("audio-slider");
+    let onMove = function() {
+        var x = slider.value;
+        AudioMixer.GetInstance().GetAudios()["main"].component.volume = x / 100;
+        AudioMixer.GetInstance().GetAudios()["gameOver"].component.volume = Math.min(x / 100 * 1.5, 1);
+
+        var color = `linear-gradient(90deg, #00ff5e ${x}%, rgb(200, 200, 200) ${x}%)`;
+        slider.style.background = color;
+    };
+    onMove();
+    slider.addEventListener("mousemove", onMove)
 };
 
 document.addEventListener('keydown', event => {
