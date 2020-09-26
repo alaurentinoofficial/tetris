@@ -8,7 +8,7 @@ function PieceFactory(ctx, board) {
         [1, 0, 0],
         [1, 1, 1],
         [0, 0, 0]
-    ], new Tile("#ff6f00", "#d16008", "rgba(255, 111, 0, 0.4)"));
+    ], new Tile("#ff5100", "#c4480f", "rgba(255, 111, 0, 0.4)"));
     
     let L = new Piece([
         [0, 0, 1],
