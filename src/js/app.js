@@ -13,6 +13,7 @@ let gameState;
 let mainSoundTrack;
 let gameOverSoundTrack;
 let gameOverModal;
+let slider;
 
 function AddScore(value) {
     GameManager.GetInstance().AddScore(value);
@@ -75,9 +76,10 @@ function pauseResume() {
     }
 }
 
+
 function stop() {
     GameManager.GetInstance().SetState(GameState.STOPED);
-}
+} 
 
 function exit() {
     stop();
@@ -88,6 +90,15 @@ function exit() {
 function playAgain() {
     Reset();
     play();
+}
+
+function onMoveSlider() {
+    var x = slider.value;
+    AudioMixer.GetInstance().GetAudios()["main"].component.volume = x / 100;
+    AudioMixer.GetInstance().GetAudios()["gameOver"].component.volume = Math.min(x / 100 * 1.5, 1);
+
+    var color = `linear-gradient(90deg, #00ff5e ${x}%, rgb(200, 200, 200) ${x}%)`;
+    slider.style.background = color;
 }
 
 async function GameOver() {
@@ -191,17 +202,8 @@ window.onload = () => {
 
     Reset();
 
-    let slider = document.getElementById("audio-slider");
-    let onMove = function() {
-        var x = slider.value;
-        AudioMixer.GetInstance().GetAudios()["main"].component.volume = x / 100;
-        AudioMixer.GetInstance().GetAudios()["gameOver"].component.volume = Math.min(x / 100 * 1.5, 1);
-
-        var color = `linear-gradient(90deg, #00ff5e ${x}%, rgb(200, 200, 200) ${x}%)`;
-        slider.style.background = color;
-    };
-    onMove();
-    slider.addEventListener("mousemove", onMove)
+    slider = document.getElementById("audio-slider");
+    onMoveSlider();
 };
 
 document.addEventListener('keydown', event => {
