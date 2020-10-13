@@ -164,6 +164,43 @@ function SetGameOverModalState(state) {
         gameOverModal.className = "";
 }
 
+function GameControlKeyPressListener(key) {
+    switch(key) {
+        case KEY.P:
+            pauseResume();
+            break;
+        case KEY.R:
+            exit();
+            break;
+    }
+}
+
+function MovementsControlKeyPressListener(key) {
+    if(GameManager.GetInstance().GetState() == GameState.GAMING) {
+        switch(key) {
+            case KEY.UP:
+                GameManager.GetInstance().GetPawn().Rotate();
+                break;
+            case KEY.LEFT:
+                GameManager.GetInstance().GetPawn().AddForce(-1,0);
+                break;
+            case KEY.RIGHT:
+                GameManager.GetInstance().GetPawn().AddForce(1,0);
+                break;
+            case KEY.DOWN:
+                GameManager.GetInstance().GetPawn().AddForce(0,1);
+                break;
+        }
+
+        DrawFrame();
+    }
+}
+
+function KeyPressEventObserver(event) {
+    GameControlKeyPressListener(event.keyCode);
+    MovementsControlKeyPressListener(event.keyCode);
+}
+
 window.onload = () => {
     scoreTxt = document.getElementById("score");
     levelTxt = document.getElementById("level");
@@ -206,26 +243,4 @@ window.onload = () => {
     onMoveSlider();
 };
 
-document.addEventListener('keydown', event => {
-    if(PressKeyListenersMovements[event.keyCode]) {
-        event.preventDefault();
-        PressKeyListenersMovements[event.keyCode]();
-        DrawFrame();
-    }
-    else if(PressKeyListeners[event.keyCode]) {
-        PressKeyListeners[event.keyCode]();
-    }
-});
-
-const PressKeyListeners = {
-    [KEY.P]: () => pauseResume(),
-    [KEY.R]: () => exit()
-}
-
-const PressKeyListenersMovements = {
-    [KEY.UP]:    () => { if(GameManager.GetInstance().GetState() == GameState.GAMING) GameManager.GetInstance().GetPawn().Rotate()},
-    [KEY.LEFT]:  () => { if(GameManager.GetInstance().GetState() == GameState.GAMING) GameManager.GetInstance().GetPawn().AddForce(-1,0)},
-    [KEY.RIGHT]: () => { if(GameManager.GetInstance().GetState() == GameState.GAMING) GameManager.GetInstance().GetPawn().AddForce(1,0)},
-    [KEY.DOWN]:  () => { if(GameManager.GetInstance().GetState() == GameState.GAMING) GameManager.GetInstance().GetPawn().AddForce(0,1)}
-};
-
+document.addEventListener('keydown', KeyPressEventObserver);
