@@ -15,12 +15,6 @@ let gameOverSoundTrack;
 let gameOverModal;
 let slider;
 
-function AddScore(value) {
-    GameManager.GetInstance().AddScore(value);
-    SetScore(GameManager.GetInstance().GetScore());
-    SetLevel(GameManager.GetInstance().GetLevel());
-}
-
 async function play() {
     //Start the game
     GameManager.GetInstance().Start();
@@ -65,12 +59,13 @@ function pauseResume() {
         AudioMixer.GetInstance().GetAudios()["main"].Play();
     }
 
-    // Otherwise if is in game then pause the game
+    // If is in game then pause the game
     else if (GameManager.GetInstance().GetState() == GameState.GAMING) {
         GameManager.GetInstance().SetState(GameState.PAUSED);
         AudioMixer.GetInstance().GetAudios()["main"].Pause();
     }
 
+    // Otherwise start game
     else {
         play();
     }
@@ -112,6 +107,7 @@ function Reset() {
     // Disable the modal
     SetGameOverModalState(false);
 
+    
     GameManager.GetInstance().SetScore(0);
     SetScore(0);
     SetLevel(1);
@@ -137,6 +133,12 @@ function Draw() {
 function DrawFrame() {
     Clear();
     Draw();
+}
+
+function AddScore(value) {
+    GameManager.GetInstance().AddScore(value);
+    SetScore(GameManager.GetInstance().GetScore());
+    SetLevel(GameManager.GetInstance().GetLevel());
 }
 
 function SetScore(point) {

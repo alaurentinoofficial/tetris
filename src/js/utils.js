@@ -1,12 +1,14 @@
-function isValueEmpty(value) {
+import { COLS, ROWS } from "../../src/js/constants.js";
+
+export function isValueEmpty(value) {
     return value === 0;
 }
 
-function pieceInInsideWalls(positionX) {
+export function pieceInInsideWalls(positionX) {
     return positionX < COLS && positionX >= 0;
 }
 
-function bounceError(x) {
+export function bounceError(x) {
     if (x >= COLS)
         return COLS - x;
     else if (x < 0)
@@ -15,15 +17,14 @@ function bounceError(x) {
         return 0;
 }
 
-function pieceAboveFloor(positionY) {
-    //console.log("Colisão")
+export function pieceAboveFloor(positionY) {
     return positionY < ROWS;
 }
 
-function transpose(matrix) {
+export function transpose(matrix) {
 	return matrix[0].map((col, i) => matrix.map(row => row[i]));
 }
 
-function sleep(ms) {
+export function sleep(ms) {
     return new Promise(r => setTimeout(r, ms));
 }

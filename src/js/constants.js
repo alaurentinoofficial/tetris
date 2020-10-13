@@ -1,8 +1,8 @@
-const ROWS = 20;
-const COLS = 10;
-const BLOCK_SIZE = 30;
+export const ROWS = 20;
+export const COLS = 10;
+export const BLOCK_SIZE = 30;
 
-const KEY = {
+export const KEY = {
 	UP: 38,
 	LEFT: 37,
 	RIGHT: 39,
@@ -13,7 +13,7 @@ const KEY = {
 
 Object.freeze(KEY);
 
-const GameState = {
+export const GameState = {
 	STOPED: "stoped",
 	GAMING: "gaming",
 	PAUSED: "paused"
