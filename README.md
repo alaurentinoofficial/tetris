@@ -22,12 +22,21 @@ https://thetetris.herokuapp.com
 
 # E2E Tests using Cypress
 
-#### To run the tests it possible this command after install the npm packages:
+#### 1. Start the local server
 ```sh
-npx cypress run
+> npm install
+
+> npm start
+```
+
+#### 2. Run the tests using the command bellow:
+```sh
+> npx cypress run
 ```
 
 <br>
+
+#### Description:
 
 - `should open the site`: Test if the site server is available
 - `should start`: The game should start right after click on play button, to pass the game state need to be "gaming"
