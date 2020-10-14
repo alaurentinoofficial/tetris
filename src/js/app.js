@@ -107,7 +107,7 @@ function Reset() {
     // Disable the modal
     SetGameOverModalState(false);
 
-    
+
     GameManager.GetInstance().SetScore(0);
     SetScore(0);
     SetLevel(1);

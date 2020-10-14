@@ -1,14 +1,12 @@
-import { COLS, ROWS } from "../../src/js/constants.js";
-
-export function isValueEmpty(value) {
+function isValueEmpty(value) {
     return value === 0;
 }
 
-export function pieceInInsideWalls(positionX) {
+function pieceInInsideWalls(positionX) {
     return positionX < COLS && positionX >= 0;
 }
 
-export function bounceError(x) {
+function bounceError(x) {
     if (x >= COLS)
         return COLS - x;
     else if (x < 0)
@@ -17,14 +15,14 @@ export function bounceError(x) {
         return 0;
 }
 
-export function pieceAboveFloor(positionY) {
+function pieceAboveFloor(positionY) {
     return positionY < ROWS;
 }
 
-export function transpose(matrix) {
+function transpose(matrix) {
 	return matrix[0].map((col, i) => matrix.map(row => row[i]));
 }
 
-export function sleep(ms) {
+function sleep(ms) {
     return new Promise(r => setTimeout(r, ms));
 }

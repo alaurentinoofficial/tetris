@@ -1,8 +1,6 @@
-import { bounceError, transpose, pieceInInsideWalls } from "../../src/js/utils.js";
-
 describe('Bounce Error', () => {
     it('To Left', () => {
-        let x = bounceError(15);
+        let x = bounceError(COLS + 5);
 
         expect(-5).to.equal(x);
     });
@@ -51,30 +49,28 @@ describe('Transpose matrix', () => {
 });
 
 describe('Piece inside the walls', () => {
-    it('It is 5', () => {
-        let x = pieceInInsideWalls(5);
+    it('Middle of grid', () => {
+        let x = pieceInInsideWalls(Math.round(COLS / 2));
+
+        console.log(Math.round(COLS / 2))
 
         expect(true).to.eql(x);
     });
 
-    it('It is 0', () => {
-        let x = pieceInInsideWalls(5);
+    it('Begin of the grid', () => {
+        let x = pieceInInsideWalls(0);
 
         expect(true).to.eql(x);
     });
 
-    it("It isn't -15", () => {
+    it("Out -15 tiles", () => {
         let x = pieceInInsideWalls(-15);
-
-        console.log(x)
 
         expect(false).to.eql(x);
     });
 
-    it("It isn't 10", () => {
-        let x = pieceInInsideWalls(10);
-
-        console.log(x)
+    it("Out Max + 10", () => {
+        let x = pieceInInsideWalls(COLS + 10);
 
         expect(false).to.eql(x);
     });
