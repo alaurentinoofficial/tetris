@@ -19,6 +19,26 @@ https://thetetris.herokuapp.com
 <br>
 <br>
 
+# E2E Tests using Cypress
+
+#### To run the tests it possible this command after install the npm packages:
+```sh
+npx cypress run
+```
+
+<br>
+
+- `should open the site`: Test if the site server is available
+- `should start`: The game should start right after click on play button, to pass the game state need to be "gaming"
+- `should pause`: The game should pause right after click on pause button, to pass the game state need to be "pause"
+- `should reset`: The game should pause right after click on reset button, to pass the game state need to be "stoped"
+- `should change game volume`: Check if is possible change the value of music volume in game
+- `should game over`: Test if the game ends after all pieces fall for some time, to pass the game over model should pop up and the model have the class "active"
+
+<br>
+<br>
+<br>
+
 # How to play
 
 ### The Pieces
