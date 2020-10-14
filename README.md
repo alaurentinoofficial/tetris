@@ -1,4 +1,5 @@
 # Tetris
+![CI](https://github.com/alaurentinoofficial/tetris/workflows/CI/badge.svg)
 [![Version](https://img.shields.io/badge/Version-1.4-blue.svg)]()
 [![Project](https://img.shields.io/badge/Medium-Link-dgreen.svg)](https://medium.com/@alaurentinoofficial/tetris-utilizando-canvas-e-javascript-43a082556ba5
 )
