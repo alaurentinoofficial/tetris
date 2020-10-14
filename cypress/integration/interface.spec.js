@@ -1,6 +1,6 @@
 describe("Testa o visual", () => {
     it("should open the site", () => {
-        cy.visit("https://thetetris.herokuapp.com/");
+        cy.visit("http://localhost:8081/");
     });
 
     it("should start", () => {
